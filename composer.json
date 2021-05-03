@@ -6,7 +6,7 @@
         "Sms", "sms.ru", "smsaero.ru", "iqsms.ru", "smsc.ru", "messagebird.com"
     ],
     "license": "MIT",
-    "homepage": "https://github.com/maurit/SmsBundle",
+    "homepage": "https://github.com/Maurit/SmsBundle",
     "authors": [
         {
             "name": "Yamilov Stepan",
@@ -20,11 +20,11 @@
     ],
     "require": {
         "php": ">=7.1.0",
-        "symfony/framework-bundle": "^3.4|^4.4",
+        "symfony/framework-bundle": "^3.4|^4.4|^5.0",
         "guzzlehttp/guzzle": "^6.5"
     },
     "require-dev": {
-        "symfony/console": "^4.0",
+        "symfony/console": "^4.0|^5.0",
         "phpunit/phpunit": "^8.5"
     },
     "autoload": {
