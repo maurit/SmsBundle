@@ -1,61 +1,59 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Tests\Provider;
 
+
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
 use Maurit\Bundle\SmsBundle\Exception\SmsCenterException;
 use Maurit\Bundle\SmsBundle\Provider\SmsCenterProvider;
 use Maurit\Bundle\SmsBundle\Sms\Sms;
+use PHPUnit\Framework\TestCase;
 
-class SmsCenterProviderTest extends TestCase
+
+class SmsCenterProviderTest
+	extends TestCase
 {
-    use GuzzleClientTrait;
+	use GuzzleClientTrait;
 
-    public function testThatSettersImplementsChainPattern(): void
-    {
-        $provider = (new SmsCenterProvider())
-            ->setLogin('login')
-            ->setPassword('password')
-            ->setSender('sender')
-            ->setFlash(true)
-            ->setClient(new Client())
-        ;
+	public function testThatSettersImplementsChainPattern(): void
+	{
+		$provider = (new SmsCenterProvider)
+			->setLogin('login')
+			->setPassword('password')
+			->setSender('sender')
+			->setFlash(true)
+			->setClient(new Client);
 
-        $this->assertInstanceOf(SmsCenterProvider::class, $provider);
-    }
+		$this->assertInstanceOf(SmsCenterProvider::class, $provider);
+	}
 
-    public function testThatExceptionThrownOnInvalidResponseCode(): void
-    {
-        $this->expectException(SmsCenterException::class);
+	public function testThatExceptionThrownOnInvalidResponseCode(): void
+	{
+		$this->expectException(SmsCenterException::class);
 
-        (new SmsCenterProvider())
-            ->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{"error": "Nothing to do here", "error_code": 6}')))
-            ->send(new Sms('+1234567890', 'Hello World'))
-        ;
-    }
+		(new SmsCenterProvider)
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{"error": "Nothing to do here", "error_code": 6}')))
+			->send(new Sms('+1234567890', 'Hello World'));
+	}
 
-    public function testSend(): void
-    {
-        $response = (new SmsCenterProvider())
-            ->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{"id": 1, "cnt": 1}')))
-            ->send(new Sms('+1234567890', 'Hello World'))
-        ;
+	public function testSend(): void
+	{
+		$response = (new SmsCenterProvider)
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{"id": 1, "cnt": 1}')))
+			->send(new Sms('+1234567890', 'Hello World'));
 
-        $this->assertTrue($response);
-    }
+		$this->assertTrue($response);
+	}
 
-    public function testSendWithAdditionalPostData(): void
-    {
-        $response = (new SmsCenterProvider())
-            ->setSender('sender')
-            ->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{"id": 1, "cnt": 1}')))
-            ->send(new Sms('+1234567890', 'Hello World'))
-        ;
+	public function testSendWithAdditionalPostData(): void
+	{
+		$response = (new SmsCenterProvider)
+			->setSender('sender')
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{"id": 1, "cnt": 1}')))
+			->send(new Sms('+1234567890', 'Hello World'));
 
-        $this->assertTrue($response);
-    }
+		$this->assertTrue($response);
+	}
 }

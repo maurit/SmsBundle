@@ -1,90 +1,60 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Sms;
 
-class Sms implements SmsInterface
+
+class Sms
+	implements SmsInterface
 {
-    /**
-     * @var string
-     */
-    private $phoneNumber;
+	/** @var string */
+	private $phoneNumber;
+	/** @var string */
+	private $message;
+	/** @var \DateTime */
+	private $dateTime;
 
-    /**
-     * @var string
-     */
-    private $message;
 
-    /**
-     * @var \DateTime
-     */
-    private $dateTime;
+	public function __construct(string $phoneNumber, string $message, \DateTime $dateTime = null)
+	{
+		$this->setPhoneNumber($phoneNumber);
+		$this->setMessage($message);
+		$this->setDateTime(($dateTime) ?? new \DateTime);
+	}
 
-    public function __construct(string $phoneNumber, string $message, \DateTime $dateTime = null)
-    {
-        $this->setPhoneNumber($phoneNumber);
-        $this->setMessage($message);
-        $this->setDateTime(($dateTime) ?? new \DateTime());
-    }
+	public function getMessage(): string
+	{
+		return $this->message;
+	}
 
-    /**
-     * @return string
-     */
-    public function getMessage(): string
-    {
-        return $this->message;
-    }
+	public function setMessage(string $message): self
+	{
+		$this->message = $message;
 
-    /**
-     * @param string $message
-     *
-     * @return Sms
-     */
-    public function setMessage(string $message): self
-    {
-        $this->message = $message;
+		return $this;
+	}
 
-        return $this;
-    }
+	public function getPhoneNumber(): string
+	{
+		return $this->phoneNumber;
+	}
 
-    /**
-     * @return string
-     */
-    public function getPhoneNumber(): string
-    {
-        return $this->phoneNumber;
-    }
+	public function setPhoneNumber(string $phoneNumber): self
+	{
+		$this->phoneNumber = $phoneNumber;
 
-    /**
-     * @param string $phoneNumber
-     *
-     * @return Sms
-     */
-    public function setPhoneNumber(string $phoneNumber): self
-    {
-        $this->phoneNumber = $phoneNumber;
+		return $this;
+	}
 
-        return $this;
-    }
+	public function getDateTime(): \DateTime
+	{
+		return $this->dateTime;
+	}
 
-    /**
-     * @return \DateTime
-     */
-    public function getDateTime(): \DateTime
-    {
-        return $this->dateTime;
-    }
+	public function setDateTime(\DateTime $dateTime): self
+	{
+		$this->dateTime = $dateTime;
 
-    /**
-     * @param \DateTime $dateTime
-     *
-     * @return Sms
-     */
-    public function setDateTime(\DateTime $dateTime): self
-    {
-        $this->dateTime = $dateTime;
-
-        return $this;
-    }
+		return $this;
+	}
 }

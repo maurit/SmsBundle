@@ -1,8 +1,8 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Provider;
+
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -10,90 +10,82 @@ use GuzzleHttp\Exception\ClientException;
 use Maurit\Bundle\SmsBundle\Exception\MessageBirdException;
 use Maurit\Bundle\SmsBundle\Sms\SmsInterface;
 
-class MessageBirdProvider implements ProviderInterface
+
+class MessageBirdProvider
+	implements ProviderInterface
 {
-    private const SMS_SEND_URI = 'https://rest.messagebird.com/messages';
+	private const SMS_SEND_URI = 'https://rest.messagebird.com/messages';
 
-    /**
-     * @var string
-     */
-    private $accessKey;
+	/** @var string */
+	private $accessKey;
+	/** @var string */
+	private $originator;
+	/** @var string */
+	private $type;
+	/** @var ClientInterface */
+	private $client;
 
-    /**
-     * @var string
-     */
-    private $originator;
 
-    /**
-     * @var string
-     */
-    private $type;
+	public function __construct()
+	{
+		$this->setClient(new Client);
+	}
 
-    /**
-     * @var ClientInterface
-     */
-    private $client;
+	public function setClient(ClientInterface $client): self
+	{
+		$this->client = $client;
 
-    public function __construct()
-    {
-        $this->setClient(new Client());
-    }
+		return $this;
+	}
 
-    public function setAccessKey(string $accessKey): self
-    {
-        $this->accessKey = $accessKey;
+	public function setAccessKey(string $accessKey): self
+	{
+		$this->accessKey = $accessKey;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function setOriginator(string $originator): self
-    {
-        $this->originator = $originator;
+	public function setOriginator(string $originator): self
+	{
+		$this->originator = $originator;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function setType(string $type): self
-    {
-        $this->type = $type;
+	public function setType(string $type): self
+	{
+		$this->type = $type;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function setClient(ClientInterface $client): self
-    {
-        $this->client = $client;
+	public function send(SmsInterface $sms): bool
+	{
+		try {
+			$this->client->request('POST', self::SMS_SEND_URI, $this->getPostData($sms));
+		} catch (ClientException $e) {
+			$response = json_decode($e->getResponse()->getBody()->getContents());
+			$error = current($response->errors);
 
-        return $this;
-    }
+			throw new MessageBirdException($error->code, $error->description, $error->parameter);
+		}
 
-    private function getPostData(SmsInterface $sms): array
-    {
-        return [
-            'headers' => [
-                'Authorization' => sprintf('AccessKey %s', $this->accessKey)
-            ],
-            'form_params' => [
-                'originator' => $this->originator,
-                'body' => $sms->getMessage(),
-                'recipients' => $sms->getPhoneNumber(),
-                'type' => $this->type,
-                'scheduledDatetime' => $sms->getDateTime()->format(\DateTime::RFC3339),
-            ],
-        ];
-    }
+		return true;
+	}
 
-    public function send(SmsInterface $sms): bool
-    {
-        try {
-            $this->client->request('POST', self::SMS_SEND_URI, $this->getPostData($sms));
-        } catch (ClientException $e) {
-            $response = json_decode($e->getResponse()->getBody()->getContents());
-            $error = current($response->errors);
-
-            throw new MessageBirdException($error->code, $error->description, $error->parameter);
-        }
-
-        return true;
-    }
+	private function getPostData(SmsInterface $sms): array
+	{
+		return [
+			'headers' => [
+				'Authorization' => sprintf('AccessKey %s', $this->accessKey)
+			],
+			'form_params' => [
+				'originator' => $this->originator,
+				'body' => $sms->getMessage(),
+				'recipients' => $sms->getPhoneNumber(),
+				'type' => $this->type,
+				'scheduledDatetime' => $sms->getDateTime()->format(\DateTime::RFC3339),
+			],
+		];
+	}
 }

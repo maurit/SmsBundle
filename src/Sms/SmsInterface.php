@@ -2,11 +2,12 @@
 
 namespace Maurit\Bundle\SmsBundle\Sms;
 
+
 interface SmsInterface
 {
-    public function getMessage(): string;
+	public function getMessage(): string;
 
-    public function getPhoneNumber(): string;
+	public function getPhoneNumber(): string;
 
-    public function getDateTime(): \DateTime;
+	public function getDateTime(): \DateTime;
 }

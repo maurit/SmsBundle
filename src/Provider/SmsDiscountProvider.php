@@ -2,114 +2,103 @@
 
 namespace Maurit\Bundle\SmsBundle\Provider;
 
+
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Maurit\Bundle\SmsBundle\Exception\SmsDiscountException;
 use Maurit\Bundle\SmsBundle\Sms\SmsInterface;
 
-class SmsDiscountProvider implements ProviderInterface
+class SmsDiscountProvider
+	implements ProviderInterface
 {
-    private const SMS_SEND_URI = 'http://api.iqsms.ru/messages/v2/send/';
+	private const SMS_SEND_URI = 'http://api.iqsms.ru/messages/v2/send/';
 
-    /**
-     * @var string
-     */
-    private $login;
+	/** @var string */
+	private $login;
+	/** @var string */
+	private $password;
+	/** @var null|string */
+	private $sender;
+	/** @var bool */
+	private $flash;
+	/** @var ClientInterface */
+	private $client;
 
-    /**
-     * @var string
-     */
-    private $password;
 
-    /**
-     * @var null|string
-     */
-    private $sender;
+	public function __construct()
+	{
+		$this->setClient(new Client);
+	}
 
-    /**
-     * @var bool
-     */
-    private $flash;
+	public function setClient(ClientInterface $client): self
+	{
+		$this->client = $client;
 
-    /**
-     * @var ClientInterface
-     */
-    private $client;
+		return $this;
+	}
 
-    public function __construct()
-    {
-        $this->setClient(new Client());
-    }
+	public function setLogin(string $login): self
+	{
+		$this->login = $login;
 
-    public function setLogin(string $login): self
-    {
-        $this->login = $login;
+		return $this;
+	}
 
-        return $this;
-    }
+	public function setPassword(string $password): self
+	{
+		$this->password = $password;
 
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
+		return $this;
+	}
 
-        return $this;
-    }
+	public function setSender(?string $sender): self
+	{
+		$this->sender = $sender;
 
-    public function setSender(?string $sender): self
-    {
-        $this->sender = $sender;
+		return $this;
+	}
 
-        return $this;
-    }
+	public function setFlash(bool $flash): self
+	{
+		$this->flash = $flash;
 
-    public function setFlash(bool $flash): self
-    {
-        $this->flash = $flash;
+		return $this;
+	}
 
-        return $this;
-    }
+	public function send(SmsInterface $sms)
+	{
+		$response = $this->client->request('POST', self::SMS_SEND_URI, $this->getPostData($sms));
+		$responseData = explode(';', $response->getBody()->getContents());
 
-    public function setClient(ClientInterface $client): self
-    {
-        $this->client = $client;
+		if ($responseData[0] != 'accepted') {
+			throw new SmsDiscountException($responseData[1]);
+		}
 
-        return $this;
-    }
+		return true;
+	}
 
-    private function getPostData(SmsInterface $sms): array
-    {
-        $post = [
-            'auth' => [
-                $this->login,
-                $this->password
-            ],
-            'form_params' => [
-                'phone' => $sms->getPhoneNumber(),
-                'text' => $sms->getMessage(),
-                'scheduleTime' => $sms->getDateTime()->format(\DateTime::RFC3339)
-            ]
-        ];
+	private function getPostData(SmsInterface $sms): array
+	{
+		$post = [
+			'auth' => [
+				$this->login,
+				$this->password
+			],
+			'form_params' => [
+				'phone' => $sms->getPhoneNumber(),
+				'text' => $sms->getMessage(),
+				'scheduleTime' => $sms->getDateTime()->format(\DateTime::RFC3339)
+			]
+		];
 
-        if ($this->sender) {
-            $post['form_params']['sender'] = $this->sender;
-        }
+		if ($this->sender) {
+			$post['form_params']['sender'] = $this->sender;
+		}
 
-        if ($this->flash) {
-            $post['form_params']['flash'] = 1;
-        }
+		if ($this->flash) {
+			$post['form_params']['flash'] = 1;
+		}
 
-        return $post;
-    }
-
-    public function send(SmsInterface $sms)
-    {
-        $response = $this->client->request('POST', self::SMS_SEND_URI, $this->getPostData($sms));
-        $responseData = explode(';', $response->getBody()->getContents());
-
-        if ($responseData[0] != 'accepted') {
-            throw new SmsDiscountException($responseData[1]);
-        }
-
-        return true;
-    }
+		return $post;
+	}
 }

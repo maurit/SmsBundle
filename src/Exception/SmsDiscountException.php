@@ -2,6 +2,8 @@
 
 namespace Maurit\Bundle\SmsBundle\Exception;
 
-class SmsDiscountException extends \Exception
+
+class SmsDiscountException
+	extends \Exception
 {
 }

@@ -2,91 +2,84 @@
 
 namespace Maurit\Bundle\SmsBundle\Provider;
 
+
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Maurit\Bundle\SmsBundle\Exception\SmsRuException;
 use Maurit\Bundle\SmsBundle\Sms\SmsInterface;
 
-class SmsRuProvider implements ProviderInterface
+
+class SmsRuProvider
+	implements ProviderInterface
 {
-    private const SMS_SEND_URI = 'https://sms.ru/sms/send';
+	private const SMS_SEND_URI = 'https://sms.ru/sms/send';
 
-    /**
-     * @var string
-     */
-    private $apiId;
+	/** @var string */
+	private $apiId;
+	/** @var string */
+	private $from;
+	/** @var bool */
+	private $test;
+	/** @var ClientInterface */
+	private $client;
 
-    /**
-     * @var string
-     */
-    private $from;
 
-    /**
-     * @var bool
-     */
-    private $test;
+	public function __construct()
+	{
+		$this->setClient(new Client);
+	}
 
-    /**
-     * @var ClientInterface
-     */
-    private $client;
+	public function setClient(ClientInterface $client): self
+	{
+		$this->client = $client;
 
-    public function __construct()
-    {
-        $this->setClient(new Client());
-    }
+		return $this;
+	}
 
-    public function setApiId(string $apiId): self
-    {
-        $this->apiId = $apiId;
+	public function setApiId(string $apiId): self
+	{
+		$this->apiId = $apiId;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function setFrom(string $from): self
-    {
-        $this->from = $from;
+	public function setFrom(string $from): self
+	{
+		$this->from = $from;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function setTest(bool $test): self
-    {
-        $this->test = $test;
+	public function setTest(bool $test): self
+	{
+		$this->test = $test;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function setClient(ClientInterface $client): self
-    {
-        $this->client = $client;
+	public function send(SmsInterface $sms): bool
+	{
+		$response = $this->client->request('POST', self::SMS_SEND_URI, $this->getPostData($sms));
+		$responseCode = (int)$response->getBody()->read(3);
 
-        return $this;
-    }
+		if ($responseCode != 100) {
+			throw new SmsRuException($responseCode);
+		}
 
-    private function getPostData(SmsInterface $sms): array
-    {
-        return [
-            'form_params' => [
-                'api_id' => $this->apiId,
-                'from' => $this->from,
-                'to' => $sms->getPhoneNumber(),
-                'msg' => $sms->getMessage(),
-                'time' => $sms->getDateTime()->getTimestamp(),
-                'test' => (int)$this->test,
-            ],
-        ];
-    }
+		return true;
+	}
 
-    public function send(SmsInterface $sms): bool
-    {
-        $response = $this->client->request('POST', self::SMS_SEND_URI, $this->getPostData($sms));
-        $responseCode = (int)$response->getBody()->read(3);
-
-        if ($responseCode != 100) {
-            throw new SmsRuException($responseCode);
-        }
-
-        return true;
-    }
+	private function getPostData(SmsInterface $sms): array
+	{
+		return [
+			'form_params' => [
+				'api_id' => $this->apiId,
+				'from' => $this->from,
+				'to' => $sms->getPhoneNumber(),
+				'msg' => $sms->getMessage(),
+				'time' => $sms->getDateTime()->getTimestamp(),
+				'test' => (int)$this->test,
+			],
+		];
+	}
 }
