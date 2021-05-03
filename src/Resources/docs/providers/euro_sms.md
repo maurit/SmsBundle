@@ -1,6 +1,6 @@
-# EuroSms (APIv3)
+# EuroSMS (APIv3)
 
-Provider to connect with [EuroSms](https://www.eurosms.com/) service.
+Provider to connect with [EuroSMS](https://www.eurosms.com/) service.
 
 ## Parameters
 

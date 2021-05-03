@@ -1,6 +1,6 @@
 # SmsBundle
 
-This bundle will help you to implement an sms messages to your project
+This bundle will help you to implement a sms messages to your project
 
 # Installation 
 
@@ -14,6 +14,7 @@ $ composer require maurit/sms-bundle ^1.0
 
 You can define as many provider configurations as you want. Available providers are:
  
+ * [EuroSMS](src/Resources/docs/providers/euro_sms.md) [eurosms.com]
  * [Message Bird](src/Resources/docs/providers/message_bird.md) [messagebird.com]
  * [Sms Ru](src/Resources/docs/providers/sms_ru.md) [sms.ru]
  * [Sms Aero](src/Resources/docs/providers/sms_aero.md) [smsaero.ru]
@@ -29,11 +30,12 @@ You can define as many provider configurations as you want. Available providers 
 // src/Controller/FooController.php
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Maurit\Bundle\SmsBundle\Service\ProviderManager;
 use Maurit\Bundle\SmsBundle\Sms\Sms;
 
-class FooController extends Controller
+class FooController
+    extends AbstractController
 {
     public function barAction(ProviderManager $providerManager)
     {
@@ -52,11 +54,12 @@ If you want to schedule an sms delivery
 // src/Controller/FooController.php
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Maurit\Bundle\SmsBundle\Service\ProviderManager;
 use Maurit\Bundle\SmsBundle\Sms\Sms;
 
-class FooController extends Controller
+class FooController
+    extends AbstractController
 {
     public function barAction(ProviderManager $providerManager)
     {
@@ -76,9 +79,6 @@ class FooController extends Controller
         $provider->send($remindSms); // will be sent after 5 minutes
     }
 }
-
-
-
 ```
 
 # Tips
