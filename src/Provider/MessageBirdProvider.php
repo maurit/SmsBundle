@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Yamilovs\Bundle\SmsBundle\Provider;
+namespace Maurit\Bundle\SmsBundle\Provider;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
-use Yamilovs\Bundle\SmsBundle\Exception\MessageBirdException;
-use Yamilovs\Bundle\SmsBundle\Sms\SmsInterface;
+use Maurit\Bundle\SmsBundle\Exception\MessageBirdException;
+use Maurit\Bundle\SmsBundle\Sms\SmsInterface;
 
 class MessageBirdProvider implements ProviderInterface
 {

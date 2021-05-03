@@ -1,12 +1,12 @@
 <?php
 
-namespace Yamilovs\Bundle\SmsBundle\DependencyInjection\Compiler;
+namespace Maurit\Bundle\SmsBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Yamilovs\Bundle\SmsBundle\DependencyInjection\Factory\Provider\AbstractProviderFactory;
-use Yamilovs\Bundle\SmsBundle\Service\ProviderManager;
+use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\AbstractProviderFactory;
+use Maurit\Bundle\SmsBundle\Service\ProviderManager;
 
 class ProviderCompilerPass implements CompilerPassInterface
 {

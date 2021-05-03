@@ -1,6 +1,6 @@
 <?php
 
-namespace Yamilovs\Bundle\SmsBundle\Sms;
+namespace Maurit\Bundle\SmsBundle\Sms;
 
 interface SmsInterface
 {

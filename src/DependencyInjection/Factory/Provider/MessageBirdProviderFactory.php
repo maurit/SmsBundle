@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yamilovs\Bundle\SmsBundle\DependencyInjection\Factory\Provider;
+namespace Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -16,7 +16,7 @@ class MessageBirdProviderFactory extends AbstractProviderFactory
 
     public function getDefinition(array $config): ChildDefinition
     {
-        return (new ChildDefinition('yamilovs_sms.prototype.provider.message_bird'))
+        return (new ChildDefinition('maurit_sms.prototype.provider.message_bird'))
             ->addMethodCall('setAccessKey', [$config['access_key']])
             ->addMethodCall('setOriginator', [$config['originator']])
             ->addMethodCall('setType', [$config['type']])

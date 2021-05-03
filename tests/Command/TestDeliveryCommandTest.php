@@ -1,13 +1,13 @@
 <?php
 
-namespace Yamilovs\Bundle\SmsBundle\Tests\Command;
+namespace Maurit\Bundle\SmsBundle\Tests\Command;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Yamilovs\Bundle\SmsBundle\Command\TestDeliveryCommand;
-use Yamilovs\Bundle\SmsBundle\Service\ProviderManager;
-use Yamilovs\Bundle\SmsBundle\Tests\Fixture\Provider\ProviderFixture;
+use Maurit\Bundle\SmsBundle\Command\TestDeliveryCommand;
+use Maurit\Bundle\SmsBundle\Service\ProviderManager;
+use Maurit\Bundle\SmsBundle\Tests\Fixture\Provider\ProviderFixture;
 
 class TestDeliveryCommandTest extends TestCase
 {
@@ -20,7 +20,7 @@ class TestDeliveryCommandTest extends TestCase
         $pm->addProvider($providerName, ProviderFixture::getProvider());
         $app->add(new TestDeliveryCommand($pm));
 
-        $command = $app->find('yamilovs:sms:delivery:test');
+        $command = $app->find('maurit:sms:delivery:test');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),

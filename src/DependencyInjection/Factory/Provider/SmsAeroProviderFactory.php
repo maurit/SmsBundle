@@ -1,6 +1,6 @@
 <?php
 
-namespace Yamilovs\Bundle\SmsBundle\DependencyInjection\Factory\Provider;
+namespace Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -14,7 +14,7 @@ class SmsAeroProviderFactory extends AbstractProviderFactory
 
     public function getDefinition(array $config): ChildDefinition
     {
-        return (new ChildDefinition('yamilovs_sms.prototype.provider.sms_aero'))
+        return (new ChildDefinition('maurit_sms.prototype.provider.sms_aero'))
             ->addMethodCall('setUser', [$config['user']])
             ->addMethodCall('setApiKey', [$config['api_key']])
             ->addMethodCall('setSign', [$config['sign']])

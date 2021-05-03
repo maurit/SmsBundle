@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yamilovs\Bundle\SmsBundle\Exception;
+namespace Maurit\Bundle\SmsBundle\Exception;
 
 class MessageBirdException extends \Exception
 {

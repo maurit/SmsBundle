@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Yamilovs\Bundle\SmsBundle\Tests\Provider;
+namespace Maurit\Bundle\SmsBundle\Tests\Provider;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Yamilovs\Bundle\SmsBundle\Exception\MessageBirdException;
-use Yamilovs\Bundle\SmsBundle\Provider\MessageBirdProvider;
-use Yamilovs\Bundle\SmsBundle\Sms\Sms;
+use Maurit\Bundle\SmsBundle\Exception\MessageBirdException;
+use Maurit\Bundle\SmsBundle\Provider\MessageBirdProvider;
+use Maurit\Bundle\SmsBundle\Sms\Sms;
 
 class MessageBirdProviderTest extends TestCase
 {

@@ -7,7 +7,7 @@ This bundle will help you to implement an sms messages to your project
 You can install this bundle by the following command: 
 
 ``` bash
-$ composer require yamilovs/sms-bundle ^1.0
+$ composer require maurit/sms-bundle ^1.0
 ```
 
 # Configuration
@@ -30,8 +30,8 @@ You can define as many provider configurations as you want. Available providers 
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Yamilovs\Bundle\SmsBundle\Service\ProviderManager;
-use Yamilovs\Bundle\SmsBundle\Sms\Sms;
+use Maurit\Bundle\SmsBundle\Service\ProviderManager;
+use Maurit\Bundle\SmsBundle\Sms\Sms;
 
 class FooController extends Controller
 {
@@ -53,8 +53,8 @@ If you want to schedule an sms delivery
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Yamilovs\Bundle\SmsBundle\Service\ProviderManager;
-use Yamilovs\Bundle\SmsBundle\Sms\Sms;
+use Maurit\Bundle\SmsBundle\Service\ProviderManager;
+use Maurit\Bundle\SmsBundle\Sms\Sms;
 
 class FooController extends Controller
 {
@@ -85,5 +85,5 @@ class FooController extends Controller
 
 You can check sms delivery by the following command:
 ``` bash
-$ php bin/console yamilovs:sms:delivery:test [your_provider_name] [your_phone_number] [your_message_text]
+$ php bin/console maurit:sms:delivery:test [your_provider_name] [your_phone_number] [your_message_text]
 ```

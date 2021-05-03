@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Yamilovs\Bundle\SmsBundle\Tests\DependencyInjection\Factory\Provider;
+namespace Maurit\Bundle\SmsBundle\Tests\DependencyInjection\Factory\Provider;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition;
-use Yamilovs\Bundle\SmsBundle\DependencyInjection\Factory\Provider\MessageBirdProviderFactory;
-use Yamilovs\Bundle\SmsBundle\Provider\MessageBirdProvider;
+use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\MessageBirdProviderFactory;
+use Maurit\Bundle\SmsBundle\Provider\MessageBirdProvider;
 
 class MessageBirdProviderFactoryTest extends TestCase
 {

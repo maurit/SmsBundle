@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Yamilovs\Bundle\SmsBundle\Tests\DependencyInjection\Factory\Provider;
+namespace Maurit\Bundle\SmsBundle\Tests\DependencyInjection\Factory\Provider;
 
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Yamilovs\Bundle\SmsBundle\DependencyInjection\Factory\Provider\ProviderFactoryInterface;
-use Yamilovs\Bundle\SmsBundle\Provider\ProviderInterface;
+use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\ProviderFactoryInterface;
+use Maurit\Bundle\SmsBundle\Provider\ProviderInterface;
 
 trait ProviderTestTrait
 {

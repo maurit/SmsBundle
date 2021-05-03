@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yamilovs\Bundle\SmsBundle\Sms;
+namespace Maurit\Bundle\SmsBundle\Sms;
 
 class Sms implements SmsInterface
 {

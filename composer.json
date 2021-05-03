@@ -1,16 +1,21 @@
 {
-    "name": "yamilovs/sms-bundle",
+    "name": "maurit/sms-bundle",
     "type": "symfony-bundle",
     "description": "Sms sending system with different providers",
     "keywords": [
         "Sms", "sms.ru", "smsaero.ru", "iqsms.ru", "smsc.ru", "messagebird.com"
     ],
     "license": "MIT",
-    "homepage": "https://github.com/yamilovs/SmsBundle",
+    "homepage": "https://github.com/maurit/SmsBundle",
     "authors": [
         {
             "name": "Yamilov Stepan",
             "email": "yamilovs@gmail.com"
+        },
+        {
+            "name": "MAURIT s.r.o",
+            "email": "maurit@maurit.sk",
+            "homepage": "https://www.maurit.sk"
         }
     ],
     "require": {
@@ -24,7 +29,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Yamilovs\\Bundle\\SmsBundle\\": "src/"
+            "Maurit\\Bundle\\SmsBundle\\": "src/"
         },
         "exclude-from-classmap": [
             "src/Tests/"
@@ -32,7 +37,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Yamilovs\\Bundle\\SmsBundle\\Tests\\": "tests/"
+            "Maurit\\Bundle\\SmsBundle\\Tests\\": "tests/"
         }
     }
 }

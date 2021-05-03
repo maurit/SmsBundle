@@ -11,8 +11,8 @@ Provider to connect with [Sms Ru](https://sms.ru) service.
 ## Example
 
 ``` yaml
-# config/yamilovs_sms.yaml
-yamilovs_sms:
+# config/maurit_sms.yaml
+maurit_sms:
     providers:
         sms_ru_provider_doc: # your custom provider name
             sms_ru:

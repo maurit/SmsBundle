@@ -1,12 +1,12 @@
 <?php
 
-namespace Yamilovs\Bundle\SmsBundle\DependencyInjection;
+namespace Maurit\Bundle\SmsBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
-use Yamilovs\Bundle\SmsBundle\DependencyInjection\Factory\Provider\ProviderFactoryInterface;
+use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\ProviderFactoryInterface;
 
 class SmsExtension extends Extension
 {
@@ -27,7 +27,7 @@ class SmsExtension extends Extension
 
     public function getAlias()
     {
-        return 'yamilovs_sms';
+        return 'maurit_sms';
     }
 
     /**

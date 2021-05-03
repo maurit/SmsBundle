@@ -1,14 +1,14 @@
 <?php
 
-namespace Yamilovs\Bundle\SmsBundle\Command;
+namespace Maurit\Bundle\SmsBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Yamilovs\Bundle\SmsBundle\Service\ProviderManager;
-use Yamilovs\Bundle\SmsBundle\Sms\Sms;
+use Maurit\Bundle\SmsBundle\Service\ProviderManager;
+use Maurit\Bundle\SmsBundle\Sms\Sms;
 
 class TestDeliveryCommand extends Command
 {
@@ -24,7 +24,7 @@ class TestDeliveryCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('yamilovs:sms:delivery:test')
+            ->setName('maurit:sms:delivery:test')
             ->setDescription('Instant delivery an sms message through the selected provider.')
             ->addArgument('provider-name', InputArgument::REQUIRED)
             ->addArgument('phone-number', InputArgument::REQUIRED)

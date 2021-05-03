@@ -1,11 +1,11 @@
 <?php
 
-namespace Yamilovs\Bundle\SmsBundle\Provider;
+namespace Maurit\Bundle\SmsBundle\Provider;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use Yamilovs\Bundle\SmsBundle\Exception\SmsAeroException;
-use Yamilovs\Bundle\SmsBundle\Sms\SmsInterface;
+use Maurit\Bundle\SmsBundle\Exception\SmsAeroException;
+use Maurit\Bundle\SmsBundle\Sms\SmsInterface;
 
 class SmsAeroProvider implements ProviderInterface
 {

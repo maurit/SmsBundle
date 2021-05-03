@@ -12,8 +12,8 @@ Provider to connect with [Sms Aero](https://smsaero.ru/) service.
 ## Example
 
 ``` yaml
-# config/yamilovs_sms.yaml
-yamilovs_sms:
+# config/maurit_sms.yaml
+maurit_sms:
     providers:
         sms_aero_provider_doc: # your custom provider name
             sms_aero:

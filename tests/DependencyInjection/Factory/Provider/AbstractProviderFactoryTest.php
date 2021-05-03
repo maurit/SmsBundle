@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Yamilovs\Bundle\SmsBundle\Tests\DependencyInjection\Factory\Provider;
+namespace Maurit\Bundle\SmsBundle\Tests\DependencyInjection\Factory\Provider;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Yamilovs\Bundle\SmsBundle\DependencyInjection\Factory\Provider\AbstractProviderFactory;
-use Yamilovs\Bundle\SmsBundle\DependencyInjection\Factory\Provider\ProviderFactoryInterface;
+use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\AbstractProviderFactory;
+use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\ProviderFactoryInterface;
 
 class AbstractProviderFactoryTest extends TestCase
 {
@@ -30,8 +30,8 @@ class AbstractProviderFactoryTest extends TestCase
 
         $provider->setProviderDefinition($container, 'simple_provider_name', $provider->getDefinition([]));
 
-        $this->assertTrue($container->has('yamilovs_sms.provider.simple_provider_name'));
-        $this->assertEquals('yamilovs_sms.provider.simple_provider_name', key(
+        $this->assertTrue($container->has('maurit_sms.provider.simple_provider_name'));
+        $this->assertEquals('maurit_sms.provider.simple_provider_name', key(
                 $container->findTaggedServiceIds(AbstractProviderFactory::SERVICE_TAG))
         );
     }

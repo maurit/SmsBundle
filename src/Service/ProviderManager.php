@@ -1,8 +1,8 @@
 <?php
 
-namespace Yamilovs\Bundle\SmsBundle\Service;
+namespace Maurit\Bundle\SmsBundle\Service;
 
-use Yamilovs\Bundle\SmsBundle\Provider\ProviderInterface;
+use Maurit\Bundle\SmsBundle\Provider\ProviderInterface;
 
 class ProviderManager
 {

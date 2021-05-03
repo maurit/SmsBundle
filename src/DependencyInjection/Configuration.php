@@ -1,11 +1,11 @@
 <?php
 
-namespace Yamilovs\Bundle\SmsBundle\DependencyInjection;
+namespace Maurit\Bundle\SmsBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Yamilovs\Bundle\SmsBundle\DependencyInjection\Factory\Provider\ProviderFactoryInterface;
+use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\ProviderFactoryInterface;
 
 /**
  * This is the class that validates and merges configuration from your app/config files.
@@ -30,7 +30,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('yamilovs_sms');
+        $rootNode = $treeBuilder->root('maurit_sms');
 
         $this->buildProviderConfiguration($rootNode);
 

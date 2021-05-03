@@ -11,8 +11,8 @@ Provider to connect with [Message Bird](https://www.messagebird.com/) service.
 ## Example
 
 ``` yaml
-# config/yamilovs_sms.yaml
-yamilovs_sms:
+# config/maurit_sms.yaml
+maurit_sms:
     providers:
         message_bird_provider_doc: # your custom provider name
             message_bird:

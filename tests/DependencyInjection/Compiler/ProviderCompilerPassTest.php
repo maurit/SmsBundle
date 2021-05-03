@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Yamilovs\Bundle\SmsBundle\Tests\DependencyInjection\Compiler;
+namespace Maurit\Bundle\SmsBundle\Tests\DependencyInjection\Compiler;
 
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Yamilovs\Bundle\SmsBundle\DependencyInjection\Compiler\ProviderCompilerPass;
-use Yamilovs\Bundle\SmsBundle\DependencyInjection\Factory\Provider\AbstractProviderFactory;
-use Yamilovs\Bundle\SmsBundle\Provider\SmsAeroProvider;
-use Yamilovs\Bundle\SmsBundle\Provider\SmsCenterProvider;
-use Yamilovs\Bundle\SmsBundle\Provider\SmsDiscountProvider;
-use Yamilovs\Bundle\SmsBundle\Provider\SmsRuProvider;
-use Yamilovs\Bundle\SmsBundle\Service\ProviderManager;
+use Maurit\Bundle\SmsBundle\DependencyInjection\Compiler\ProviderCompilerPass;
+use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\AbstractProviderFactory;
+use Maurit\Bundle\SmsBundle\Provider\SmsAeroProvider;
+use Maurit\Bundle\SmsBundle\Provider\SmsCenterProvider;
+use Maurit\Bundle\SmsBundle\Provider\SmsDiscountProvider;
+use Maurit\Bundle\SmsBundle\Provider\SmsRuProvider;
+use Maurit\Bundle\SmsBundle\Service\ProviderManager;
 
 class ProviderCompilerPassTest extends TestCase
 {

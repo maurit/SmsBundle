@@ -2,28 +2,28 @@ services:
     _defaults:
         public: false
 
-    yamilovs_sms.prototype.provider.sms_ru:
-        class: Yamilovs\Bundle\SmsBundle\Provider\SmsRuProvider
+    maurit_sms.prototype.provider.sms_ru:
+        class: Maurit\Bundle\SmsBundle\Provider\SmsRuProvider
 
-    yamilovs_sms.prototype.provider.sms_aero:
-        class: Yamilovs\Bundle\SmsBundle\Provider\SmsAeroProvider
+    maurit_sms.prototype.provider.sms_aero:
+        class: Maurit\Bundle\SmsBundle\Provider\SmsAeroProvider
 
-    yamilovs_sms.prototype.provider.sms_discount:
-        class: Yamilovs\Bundle\SmsBundle\Provider\SmsDiscountProvider
+    maurit_sms.prototype.provider.sms_discount:
+        class: Maurit\Bundle\SmsBundle\Provider\SmsDiscountProvider
 
-    yamilovs_sms.prototype.provider.sms_center:
-        class: Yamilovs\Bundle\SmsBundle\Provider\SmsCenterProvider
+    maurit_sms.prototype.provider.sms_center:
+        class: Maurit\Bundle\SmsBundle\Provider\SmsCenterProvider
 
-    yamilovs_sms.prototype.provider.message_bird:
-        class: Yamilovs\Bundle\SmsBundle\Provider\MessageBirdProvider
+    maurit_sms.prototype.provider.message_bird:
+        class: Maurit\Bundle\SmsBundle\Provider\MessageBirdProvider
 
-    yamilovs_sms.provider.manager:
-        class: Yamilovs\Bundle\SmsBundle\Service\ProviderManager
+    maurit_sms.provider.manager:
+        class: Maurit\Bundle\SmsBundle\Service\ProviderManager
 
-    Yamilovs\Bundle\SmsBundle\Service\ProviderManager: '@yamilovs_sms.provider.manager'
+    Maurit\Bundle\SmsBundle\Service\ProviderManager: '@maurit_sms.provider.manager'
 
-    yamilovs_sms.command.test_delivery:
-        class: Yamilovs\Bundle\SmsBundle\Command\TestDeliveryCommand
-        arguments: ['@yamilovs_sms.provider.manager']
+    maurit_sms.command.test_delivery:
+        class: Maurit\Bundle\SmsBundle\Command\TestDeliveryCommand
+        arguments: ['@maurit_sms.provider.manager']
         tags:
             - { name: 'console.command' }
