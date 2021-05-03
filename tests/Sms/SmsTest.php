@@ -52,4 +52,17 @@ final class SmsTest
 
 		$this->assertEquals($dt, $sms->getDateTime());
 	}
+
+	public function testGetEmptySender(): void
+	{
+		$sms = new Sms('+1234567890', 'Hello World');
+		$this->assertSame('', $sms->getSender());
+	}
+
+	public function testGetCorrectSender(): void
+	{
+		$sender = 'Tester';
+		$sms = new Sms('+1234567890', 'Hello World', null, $sender);
+		$this->assertSame($sender, $sms->getSender());
+	}
 }

@@ -13,13 +13,16 @@ class Sms
 	private $message;
 	/** @var \DateTime */
 	private $dateTime;
+	/** @var string */
+	private $sender;
 
 
-	public function __construct(string $phoneNumber, string $message, \DateTime $dateTime = null)
+	public function __construct(string $phoneNumber, string $message, \DateTime $dateTime = null, ?string $sender = '')
 	{
 		$this->setPhoneNumber($phoneNumber);
 		$this->setMessage($message);
 		$this->setDateTime(($dateTime) ?? new \DateTime);
+		$this->setSender($sender ?? '');
 	}
 
 	public function getMessage(): string
@@ -54,6 +57,18 @@ class Sms
 	public function setDateTime(\DateTime $dateTime): self
 	{
 		$this->dateTime = $dateTime;
+
+		return $this;
+	}
+
+	public function getSender(): string
+	{
+		return $this->sender;
+	}
+
+	public function setSender(string $sender): self
+	{
+		$this->sender = $sender;
 
 		return $this;
 	}

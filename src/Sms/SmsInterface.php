@@ -10,4 +10,6 @@ interface SmsInterface
 	public function getPhoneNumber(): string;
 
 	public function getDateTime(): \DateTime;
+
+	public function getSender(): ?string;
 }

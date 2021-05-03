@@ -19,9 +19,12 @@
         }
     ],
     "require": {
-        "php": ">=7.1.0",
+        "php": ">=7.2.0",
+        "ext-intl": "*",
         "symfony/framework-bundle": "^3.4|^4.4|^5.0",
-        "guzzlehttp/guzzle": "^6.5"
+        "guzzlehttp/guzzle": "^6.5",
+        "nette/utils": "^3.2",
+        "giggsey/libphonenumber-for-php": "^8.12"
     },
     "require-dev": {
         "symfony/console": "^4.0|^5.0",

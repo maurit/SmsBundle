@@ -17,6 +17,9 @@ services:
     maurit_sms.prototype.provider.message_bird:
         class: Maurit\Bundle\SmsBundle\Provider\MessageBirdProvider
 
+    maurit_sms.prototype.provider.euro_sms:
+        class: Maurit\Bundle\SmsBundle\Provider\EuroSmsProvider
+
     maurit_sms.provider.manager:
         class: Maurit\Bundle\SmsBundle\Service\ProviderManager
 
