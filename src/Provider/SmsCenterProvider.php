@@ -13,6 +13,8 @@ class SmsCenterProvider
 	implements ProviderInterface
 {
 	private const SMS_SEND_URI = 'https://smsc.ru/sys/send.php';
+	private const STATUS_URI = 'https://smsc.ru/sys/status.php';
+	private const BALANCE_URI = 'https://smsc.ru/sys/balance.php';
 
 	/** @var string */
 	private $login;
@@ -109,5 +111,53 @@ class SmsCenterProvider
 	{
 		// Zero at returned string mean that we send timestamp time format
 		return sprintf('0%s', $dateTime->getTimestamp());
+	}
+
+	public function balance(): float
+	{
+		$response = $this->client->request('POST', self::BALANCE_URI, $this->getPostBalanceData());
+		$jsonResponse = json_decode($response->getBody()->getContents());
+
+		if (property_exists($jsonResponse, 'error_code')) {
+			throw new SmsCenterException($jsonResponse->error_code);
+		}
+
+		return (float)$jsonResponse->balance;
+	}
+
+	private function getPostBalanceData(): array
+	{
+		return [
+			'form_params' => [
+				'login' => $this->login,
+				'psw' => $this->getPassword(),
+				'fmt' => 3, // Get response in json format
+				'cur' => 0
+			]
+		];
+	}
+
+	public function check($id): string
+	{
+		$response = $this->client->request('POST', self::STATUS_URI, $this->getPostCheckData());
+		$jsonResponse = json_decode($response->getBody()->getContents());
+
+		if (property_exists($jsonResponse, 'error_code')) {
+			throw new SmsCenterException($jsonResponse->error_code);
+		}
+
+		return $jsonResponse->status;
+	}
+
+	private function getPostCheckData(): array
+	{
+		return [
+			'form_params' => [
+				'login' => $this->login,
+				'psw' => $this->getPassword(),
+				'fmt' => 3, // Get response in json format
+				'charset' => 'utf-8', // Use unicode charset in message text
+			]
+		];
 	}
 }

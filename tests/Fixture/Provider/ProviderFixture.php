@@ -16,6 +16,16 @@ class ProviderFixture
 			{
 				return true;
 			}
+
+			public function balance(): float
+			{
+				return 0;
+			}
+
+			public function check($id): string
+			{
+				return '';
+			}
 		};
 	}
 }

@@ -13,6 +13,8 @@ class SmsAeroProvider
 	implements ProviderInterface
 {
 	private const SMS_SEND_URI = 'https://gate.smsaero.ru/v2/sms/send';
+	private const SMS_STATUS_URI = 'https://gate.smsaero.ru/v2/sms/status';
+	private const BALANCE_URI = 'https://gate.smsaero.ru/v2/balance';
 
 	/** @var string */
 	private $user;
@@ -68,7 +70,7 @@ class SmsAeroProvider
 
 	public function send(SmsInterface $sms): bool
 	{
-		$response = $this->client->request('POST', self::SMS_SEND_URI, $this->getPostData($sms));
+		$response = $this->client->request('POST', self::SMS_SEND_URI, $this->getPostSendData($sms));
 		$jsonResponse = json_decode($response->getBody()->getContents());
 
 		if (!$jsonResponse->success === true) {
@@ -78,7 +80,7 @@ class SmsAeroProvider
 		return true;
 	}
 
-	private function getPostData(SmsInterface $sms): array
+	private function getPostSendData(SmsInterface $sms): array
 	{
 		return [
 			'headers' => [
@@ -94,6 +96,59 @@ class SmsAeroProvider
 				'number' => $sms->getPhoneNumber(),
 				'text' => $sms->getMessage(),
 				'dateSend' => $sms->getDateTime()->getTimestamp(),
+			]
+		];
+	}
+
+	public function balance(): float
+	{
+		$response = $this->client->request('POST', self::BALANCE_URI, $this->getPostBalanceData());
+		$jsonResponse = json_decode($response->getBody()->getContents());
+
+		if (!$jsonResponse->success === true) {
+			throw new SmsAeroException(json_encode($jsonResponse));
+		}
+
+		return (float)$jsonResponse->data->balance;
+	}
+
+	private function getPostBalanceData(): array
+	{
+		return [
+			'headers' => [
+				'accept' => 'application/json'
+			],
+			'auth' => [
+				$this->user,
+				$this->apiKey
+			]
+		];
+	}
+
+	public function check($id): string
+	{
+		$response = $this->client->request('POST', self::SMS_STATUS_URI, $this->getPostStatusData($id));
+		$jsonResponse = json_decode($response->getBody()->getContents());
+
+		if ($jsonResponse->success !== true) {
+			throw new SmsAeroException(json_encode($jsonResponse));
+		}
+
+		return $jsonResponse->data->extendStatus;
+	}
+
+	private function getPostStatusData($id): array
+	{
+		return [
+			'headers' => [
+				'accept' => 'application/json'
+			],
+			'auth' => [
+				$this->user,
+				$this->apiKey
+			],
+			'form_params' => [
+				'id' => $id
 			]
 		];
 	}

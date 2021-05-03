@@ -13,6 +13,8 @@ class SmsRuProvider
 	implements ProviderInterface
 {
 	private const SMS_SEND_URI = 'https://sms.ru/sms/send';
+	private const SMS_STATUS_URI = 'https://sms.ru/sms/status';
+	private const BALANCE_URI = 'https://sms.ru/my/balance';
 
 	/** @var string */
 	private $apiId;
@@ -80,6 +82,51 @@ class SmsRuProvider
 				'time' => $sms->getDateTime()->getTimestamp(),
 				'test' => (int)$this->test,
 			],
+		];
+	}
+
+	public function balance(): float
+	{
+		$response = $this->client->request('POST', self::BALANCE_URI, $this->getPostBalanceData());
+		$jsonResponse = json_decode($response->getBody()->getContents());
+		$responseCode = (int)$jsonResponse->status_code;
+
+		if ($responseCode != 100) {
+			throw new SmsRuException($responseCode);
+		}
+
+		return (float)$jsonResponse->balance;
+	}
+
+	private function getPostBalanceData(): array
+	{
+		return [
+			'form_params' => [
+				'api_id' => $this->apiId
+			]
+		];
+	}
+
+	public function check($id): string
+	{
+		$response = $this->client->request('POST', self::SMS_STATUS_URI, $this->getPostStatusData($id));
+		$jsonResponse = json_decode($response->getBody()->getContents(), true);
+		$responseCode = (int)$jsonResponse['status_code'];
+
+		if ($responseCode != 100) {
+			throw new SmsRuException($responseCode);
+		}
+
+		return $jsonResponse['sms'][$id]['status_text'];
+	}
+
+	private function getPostStatusData($id): array
+	{
+		return [
+			'form_params' => [
+				'api_id' => $this->apiId,
+				'sms_id' => $id
+			]
 		];
 	}
 }

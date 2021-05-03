@@ -56,4 +56,29 @@ class SmsCenterProviderTest
 
 		$this->assertTrue($response);
 	}
+
+	public function testCheck(): void
+	{
+		$response = (new SmsCenterProvider)
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{
+"status": 1,
+"last_date": "12.12.2017 12:12:12",
+"last_timestamp": 1513080732,
+"err": 0
+}')))
+			->check(1);
+
+		$this->assertSame('1', $response);
+	}
+
+	public function testBalance(): void
+	{
+		$response = (new SmsCenterProvider)
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{
+"balance": "123.45"
+}')))
+			->balance();
+
+		$this->assertSame(123.45, $response);
+	}
 }

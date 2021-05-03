@@ -12,6 +12,8 @@ class SmsDiscountProvider
 	implements ProviderInterface
 {
 	private const SMS_SEND_URI = 'http://api.iqsms.ru/messages/v2/send/';
+	private const SMS_STATUS_URI = 'http://api.iqsms.ru/messages/v2/status/';
+	private const BALANCE_URI = 'http://api.iqsms.ru/messages/v2/balance/';
 
 	/** @var string */
 	private $login;
@@ -67,7 +69,7 @@ class SmsDiscountProvider
 
 	public function send(SmsInterface $sms)
 	{
-		$response = $this->client->request('POST', self::SMS_SEND_URI, $this->getPostData($sms));
+		$response = $this->client->request('POST', self::SMS_SEND_URI, $this->getPostSendData($sms));
 		$responseData = explode(';', $response->getBody()->getContents());
 
 		if ($responseData[0] != 'accepted') {
@@ -77,7 +79,7 @@ class SmsDiscountProvider
 		return true;
 	}
 
-	private function getPostData(SmsInterface $sms): array
+	private function getPostSendData(SmsInterface $sms): array
 	{
 		$post = [
 			'auth' => [
@@ -100,5 +102,48 @@ class SmsDiscountProvider
 		}
 
 		return $post;
+	}
+
+	public function balance(): float
+	{
+		$response = $this->client->request('POST', self::BALANCE_URI, $this->getPostBalanceData());
+		$responseData = explode(';', $response->getBody()->getContents());
+
+		return (float)$responseData[1];
+	}
+
+	private function getPostBalanceData(): array
+	{
+		return [
+			'auth' => [
+				$this->login,
+				$this->password
+			]
+		];
+	}
+
+	public function check($id): string
+	{
+		$response = $this->client->request('POST', self::SMS_STATUS_URI, $this->getPostStatusData($id));
+		$responseData = explode(';', $response->getBody()->getContents());
+
+		if ($responseData[0] != $id) {
+			throw new SmsDiscountException($responseData[1]);
+		}
+
+		return $responseData[1];
+	}
+
+	private function getPostStatusData($id): array
+	{
+		return [
+			'auth' => [
+				$this->login,
+				$this->password
+			],
+			'form_params' => [
+				'id' => $id
+			]
+		];
 	}
 }

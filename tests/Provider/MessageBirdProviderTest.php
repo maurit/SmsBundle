@@ -47,4 +47,17 @@ class MessageBirdProviderTest
 
 		$this->assertTrue($response);
 	}
+
+	public function testBalance(): void
+	{
+		$response = (new MessageBirdProvider)
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{
+  "payment": "prepaid",
+  "type": "euros",
+  "amount": 103
+}')))
+			->balance();
+
+		$this->assertSame(103.0, $response);
+	}
 }

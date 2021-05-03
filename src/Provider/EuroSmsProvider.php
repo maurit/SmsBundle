@@ -18,6 +18,8 @@ class EuroSmsProvider
 {
 	private const SMS_SEND_URI = 'https://as.eurosms.com/api/v3/send/one';
 	private const SMS_SEND_URI_TEST = 'http://as.eurosms.com/api/v3/test/one';
+	private const SMS_STATUS_URI = 'http://as.eurosms.com/api/v3/status/one/';
+	private const BALANCE_URI = 'https://as.eurosms.com/api/v2/balance';
 
 	/** @var string */
 	private $key;
@@ -131,5 +133,69 @@ class EuroSmsProvider
 	private function calcSignature($sender, $rcpt, $msg): string
 	{
 		return hash_hmac('sha256', $sender . $rcpt . $msg, $this->key);
+	}
+
+	public function balance(): float
+	{
+		try {
+			$respRaw = $this->client->request('GET', self::BALANCE_URI, $this->getGetBalanceData())->getBody()->getContents();
+		} catch (\Exception $e) {
+			throw new EuroSmsException($e->getMessage());
+		}
+		if (strpos($respRaw, 'BAD_INT') !== false) {
+			throw new EuroSmsException('Bad integration key');
+		}
+		return (float)$respRaw;
+	}
+
+	private function getGetBalanceData(): array
+	{
+		return [
+			'query' => [
+				'i' => $this->id
+			]
+		];
+	}
+
+	public function check($id): string
+	{
+		try {
+			$respRaw = $this->client->request('GET', self::SMS_STATUS_URI . $id, $this->getGetCheckData())->getBody()->getContents();
+			$respJson = json_decode($respRaw);
+		} catch (\Exception $e) {
+			throw new EuroSmsException($e->getMessage() . "\n" . $respRaw);
+		}
+		if ($respJson->err_code == 'OK') {
+			switch ($respJson->dlr) {
+				case 'ENROUTE':
+					return 'Queued';
+				case 'ACCEPTD':
+					return 'Accepted';
+				case 'DELIVRD':
+					return 'Delivered';
+				case 'UNDELIV':
+					return 'Undelivered';
+				case 'EXPIRED':
+					return 'Expired';
+				case 'REJECTD':
+					return 'Rejected';
+				case 'DELETED':
+					return 'Cancelled';
+				case 'UNKNOWN':
+					return 'Unknown';
+				default:
+					return '?' . $respJson->dlr;
+			}
+		}
+		throw new EuroSmsException($respRaw);
+	}
+
+	private function getGetCheckData(): array
+	{
+		return [
+			'headers' => [
+				'accept' => 'application/json'
+			]
+		];
 	}
 }

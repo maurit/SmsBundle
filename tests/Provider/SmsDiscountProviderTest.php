@@ -57,4 +57,22 @@ class SmsDiscountProviderTest
 
 		$this->assertTrue($response);
 	}
+
+	public function testCheck(): void
+	{
+		$response = (new SmsDiscountProvider)
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], 'A132571BC;delivered')))
+			->check('A132571BC');
+
+		$this->assertSame('delivered', $response);
+	}
+
+	public function testBalance(): void
+	{
+		$response = (new SmsDiscountProvider)
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], 'RUB;540.15')))
+			->balance();
+
+		$this->assertSame(540.15, $response);
+	}
 }

@@ -46,4 +46,44 @@ class SmsAeroProviderTest
 
 		$this->assertTrue($response);
 	}
+
+	public function testCheck(): void
+	{
+		$response = (new SmsAeroProvider)
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{
+        "success": true,
+        "data": {
+            "id": 1,
+            "from": "SMS Aero",
+            "number": "79990000000",
+            "text": "your text",
+            "status": 1,
+            "extendStatus": "delivery",
+            "channel": "DIRECT",
+            "cost": "1.95",
+            "dateCreate": 1510656981,
+            "dateSend": 1510656981,
+            "dateAnswer": 1510656987
+        },
+        "message": null
+    }')))
+			->check(1);
+
+		$this->assertSame('delivery', $response);
+	}
+
+	public function testBalance(): void
+	{
+		$response = (new SmsAeroProvider)
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '    {
+        "success": true,
+        "data": {
+            "balance": 1389.26
+        },
+        "message": null
+    }')))
+			->balance();
+
+		$this->assertSame(1389.26, $response);
+	}
 }

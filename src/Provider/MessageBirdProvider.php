@@ -15,6 +15,7 @@ class MessageBirdProvider
 	implements ProviderInterface
 {
 	private const SMS_SEND_URI = 'https://rest.messagebird.com/messages';
+	private const BALANCE_URI = 'https://rest.messagebird.com/balance';
 
 	/** @var string */
 	private $accessKey;
@@ -87,5 +88,32 @@ class MessageBirdProvider
 				'scheduledDatetime' => $sms->getDateTime()->format(\DateTime::RFC3339),
 			],
 		];
+	}
+
+	public function balance(): float
+	{
+		try {
+			$restRaw = $this->client->request('GET', self::BALANCE_URI, $this->getGetBalanceData());
+		} catch (ClientException $e) {
+			$response = json_decode($e->getResponse()->getBody()->getContents());
+			$error = current($response->errors);
+			throw new MessageBirdException($error->code, $error->description, $error->parameter);
+		}
+		$response = json_decode($restRaw->getBody()->getContents());
+		return (float)$response->amount;
+	}
+
+	private function getGetBalanceData(): array
+	{
+		return [
+			'headers' => [
+				'Authorization' => sprintf('AccessKey %s', $this->accessKey)
+			]
+		];
+	}
+
+	public function check($id): string
+	{
+		return '';
 	}
 }

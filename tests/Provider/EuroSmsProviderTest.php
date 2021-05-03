@@ -52,4 +52,22 @@ class EuroSmsProviderTest
 
 		$this->assertSame('cdef60d8-52a5-47b3-984b-c15c54c196f1', $response);
 	}
+
+	public function testCheck(): void
+	{
+		$response = (new EuroSmsProvider)
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{"rcpt":421900123456,"carrier":"231.1","dlr_time":"2019-07-16 08:48:00","price":0.029,"snd":"2019-07-16 08:48:49","i":"cdef60d8-52a5-47b3-984b-c15c54c196f1","err_code":"OK","sgmnt":1,"dlr":"DELIVRD"}')))
+			->check('cdef60d8-52a5-47b3-984b-c15c54c196f1');
+
+		$this->assertSame('Delivered', $response);
+	}
+
+	public function testBalance(): void
+	{
+		$response = (new EuroSmsProvider)
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], "80.693 EUR\n")))
+			->balance();
+
+		$this->assertSame(80.693, $response);
+	}
 }

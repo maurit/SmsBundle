@@ -45,4 +45,38 @@ class SmsRuProviderTest
 
 		$this->assertTrue($response);
 	}
+
+	public function testCheck(): void
+	{
+		$response = (new SmsRuProvider)
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{
+    "status": "OK",
+    "status_code": 100,
+    "sms": {
+        "000000-000001": {
+            "status": "OK",
+            "status_code": 103,
+            "cost": 0.50,
+            "status_text": "Сообщение доставлено"
+        }
+    } ,
+    "balance": 4122.56
+}')))
+			->check('000000-000001');
+
+		$this->assertSame('Сообщение доставлено', $response);
+	}
+
+	public function testBalance(): void
+	{
+		$response = (new SmsRuProvider)
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{
+    "status": "OK",
+    "status_code": 100,
+    "balance": 4762.58
+}')))
+			->balance();
+
+		$this->assertSame(4762.58, $response);
+	}
 }
