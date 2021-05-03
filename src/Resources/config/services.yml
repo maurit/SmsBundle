@@ -21,9 +21,3 @@ services:
         class: Maurit\Bundle\SmsBundle\Service\ProviderManager
 
     Maurit\Bundle\SmsBundle\Service\ProviderManager: '@maurit_sms.provider.manager'
-
-    maurit_sms.command.test_delivery:
-        class: Maurit\Bundle\SmsBundle\Command\TestDeliveryCommand
-        arguments: [ '@maurit_sms.provider.manager' ]
-        tags:
-            - { name: 'console.command' }

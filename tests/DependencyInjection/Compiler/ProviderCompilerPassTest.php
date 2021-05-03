@@ -11,7 +11,7 @@ use Maurit\Bundle\SmsBundle\Provider\SmsCenterProvider;
 use Maurit\Bundle\SmsBundle\Provider\SmsDiscountProvider;
 use Maurit\Bundle\SmsBundle\Provider\SmsRuProvider;
 use Maurit\Bundle\SmsBundle\Service\ProviderManager;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
