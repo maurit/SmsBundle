@@ -104,11 +104,11 @@ class EuroSmsProvider
 
 		$isAscii = $sms->getMessage() === Strings::toAscii($sms->getMessage());
 		if (!$isAscii && !$this->unicode) {
-			throw new \EuroSmsException('only ASCII text allowed');
+			throw new EuroSmsException('only ASCII text allowed');
 		}
 		$isLong = Strings::length($sms->getMessage()) > ($isAscii ? 160 : 70);
 		if ($isLong && !$this->long) {
-			throw new \EuroSmsException('text too long');
+			throw new EuroSmsException('text too long');
 		}
 
 		$data = [
@@ -117,7 +117,7 @@ class EuroSmsProvider
 			],
 			'json' => [
 				'iid' => $this->id,
-				'sgn' => $this->calcSignature($sms->getSender(), $sms->getPhoneNumber(), $sms->getMessage()),
+				'sgn' => $this->calcSignature($sms->getSender(), $rcptN, $sms->getMessage()),
 				'rcpt' => $rcptN,
 				'flgs' => 0x01 /*Require delivery report*/ | ($isLong ? 0x02 : 0) | ($isAscii ? 0 : 0x04),
 				'sndr' => $sms->getSender(),
