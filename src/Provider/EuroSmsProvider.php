@@ -20,6 +20,7 @@ class EuroSmsProvider
 	private const SMS_SEND_URI_TEST = 'http://as.eurosms.com/api/v3/test/one';
 	private const SMS_STATUS_URI = 'http://as.eurosms.com/api/v3/status/one/';
 	private const BALANCE_URI = 'https://as.eurosms.com/api/v2/balance';
+	private const SMS_STATUS1_URI = 'http://as.eurosms.com/sms/Sender';
 
 	/** @var string */
 	private $key;
@@ -97,7 +98,7 @@ class EuroSmsProvider
 		try {
 			$pnu = PhoneNumberUtil::getInstance();
 			$parsed = $pnu->parse($sms->getPhoneNumber(), 'SK');
-			$rcptN = (int)Strings::trim(Strings::replace($pnu->format($parsed, PhoneNumberFormat::INTERNATIONAL),'% %', ''), '+');
+			$rcptN = (int)Strings::trim(Strings::replace($pnu->format($parsed, PhoneNumberFormat::INTERNATIONAL), '% %', ''), '+');
 		} catch (\Throwable $ex) {
 			throw new EuroSmsException('invalid recipient number');
 		}
@@ -159,8 +160,45 @@ class EuroSmsProvider
 
 	public function check($id): string
 	{
+		if (Strings::match((string)$id, '/^\d+$/')) {
+			return $this->check1($id);
+		}
+		if (Strings::match($id, '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/')) {
+			return $this->check3($id);
+		}
+		throw new EuroSmsException('invalid ID: ' . $id);
+	}
+
+	private function check1($id): string
+	{
 		try {
-			$respRaw = $this->client->request('GET', self::SMS_STATUS_URI . $id, $this->getGetCheckData())->getBody()->getContents();
+			$respRaw = $this->client->request('GET', self::SMS_STATUS1_URI, $this->getGetCheck1Data($id))->getBody()->getContents();
+			$resp = explode('|', $respRaw);
+
+			if ($resp[0] != 'ok') {
+				throw new EuroSmsException($respRaw);
+			}
+
+			return trim($resp[1]);
+		} catch (\Exception $e) {
+			throw new EuroSmsException($e->getMessage() . "\n" . $respRaw);
+		}
+	}
+
+	private function getGetCheck1Data($id): array
+	{
+		return [
+			'query' => [
+				'action' => 'status1SMSHTTP',
+				'i' => $id
+			]
+		];
+	}
+
+	private function check3($id): string
+	{
+		try {
+			$respRaw = $this->client->request('GET', self::SMS_STATUS_URI . $id, $this->getGetCheck3Data())->getBody()->getContents();
 			$respJson = json_decode($respRaw);
 		} catch (\Exception $e) {
 			throw new EuroSmsException($e->getMessage() . "\n" . $respRaw);
@@ -183,6 +221,7 @@ class EuroSmsProvider
 					return 'Cancelled';
 				case 'UNKNOWN':
 					return 'Unknown';
+				case 'ERR_NO_SUCH_UUID':
 				default:
 					return '?' . $respJson->dlr;
 			}
@@ -190,7 +229,7 @@ class EuroSmsProvider
 		throw new EuroSmsException($respRaw);
 	}
 
-	private function getGetCheckData(): array
+	private function getGetCheck3Data(): array
 	{
 		return [
 			'headers' => [
