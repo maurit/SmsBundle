@@ -31,9 +31,9 @@ class Configuration
 	 */
 	public function getConfigTreeBuilder(): TreeBuilder
 	{
-		$treeBuilder = new TreeBuilder;
+		$treeBuilder = new TreeBuilder('maurit_sms');
 
-		$this->buildProviderConfiguration($treeBuilder->root('maurit_sms'));
+		$this->buildProviderConfiguration($treeBuilder->getRootNode());
 
 		return $treeBuilder;
 	}
