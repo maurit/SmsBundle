@@ -67,7 +67,7 @@ class SmsDiscountProvider
 		return $this;
 	}
 
-	public function send(SmsInterface $sms)
+	public function send(SmsInterface $sms): bool
 	{
 		$response = $this->client->request('POST', self::SMS_SEND_URI, $this->getPostSendData($sms));
 		$responseData = explode(';', $response->getBody()->getContents());

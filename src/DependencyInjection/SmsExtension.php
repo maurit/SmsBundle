@@ -17,12 +17,12 @@ class SmsExtension
 	private $providerFactoryMap = [];
 
 
-	public function addProviderFactory(ProviderFactoryInterface $providerFactory)
+	public function addProviderFactory(ProviderFactoryInterface $providerFactory): void
 	{
 		$this->providerFactoryMap[$providerFactory->getName()] = $providerFactory;
 	}
 
-	public function getAlias()
+	public function getAlias(): string
 	{
 		return 'maurit_sms';
 	}

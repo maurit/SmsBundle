@@ -18,14 +18,14 @@ use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\EuroSmsProvider
 class SmsBundle
 	extends Bundle
 {
-	public function build(ContainerBuilder $container)
+	public function build(ContainerBuilder $container): void
 	{
 		parent::build($container);
 
 		$container->addCompilerPass(new ProviderCompilerPass);
 	}
 
-	public function getContainerExtension()
+	public function getContainerExtension(): SmsExtension
 	{
 		$extension = new SmsExtension;
 		$extension->addProviderFactory(new MessageBirdProviderFactory);

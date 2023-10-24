@@ -38,7 +38,7 @@ class Configuration
 		return $treeBuilder;
 	}
 
-	private function buildProviderConfiguration(ArrayNodeDefinition $nodeDefinition)
+	private function buildProviderConfiguration(ArrayNodeDefinition $nodeDefinition): void
 	{
 		$nd = $nodeDefinition
 			->fixXmlConfig('provider', 'providers')
