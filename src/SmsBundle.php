@@ -12,7 +12,7 @@ use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\SmsRuProviderFa
 use Maurit\Bundle\SmsBundle\DependencyInjection\SmsExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\EuroSmsProviderFactory;
+use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\EurosmsComProviderFactory;
 
 
 class SmsBundle
@@ -33,7 +33,7 @@ class SmsBundle
 		$extension->addProviderFactory(new SmsAeroProviderFactory);
 		$extension->addProviderFactory(new SmsDiscountProviderFactory);
 		$extension->addProviderFactory(new SmsCenterProviderFactory);
-		$extension->addProviderFactory(new EuroSmsProviderFactory);
+		$extension->addProviderFactory(new EurosmsComProviderFactory);
 
 		return $extension;
 	}

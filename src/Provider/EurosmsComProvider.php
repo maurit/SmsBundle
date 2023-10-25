@@ -8,12 +8,12 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
-use Maurit\Bundle\SmsBundle\Exception\EuroSmsException;
+use Maurit\Bundle\SmsBundle\Exception\EurosmsComException;
 use Maurit\Bundle\SmsBundle\Sms\SmsInterface;
 use Nette\Utils\Strings;
 
 
-class EuroSmsProvider
+class EurosmsComProvider
 	implements ProviderInterface
 {
 	private const SMS_SEND_URI = 'https://as.eurosms.com/api/v3/send/one';
@@ -83,7 +83,7 @@ class EuroSmsProvider
 		$respJson = json_decode($respRaw, true);
 
 		if (!isset($respJson['uuid'])) {
-			throw new EuroSmsException($respRaw);
+			throw new EurosmsComException($respRaw);
 		}
 
 		return trim($respJson['uuid'][0]);
@@ -92,7 +92,7 @@ class EuroSmsProvider
 	private function getPostSendData(SmsInterface $sms): array
 	{
 		if (empty($sms->getSender())) {
-			throw new EuroSmsException('Sender was not set');
+			throw new EurosmsComException('Sender was not set');
 		}
 
 		try {
@@ -100,16 +100,16 @@ class EuroSmsProvider
 			$parsed = $pnu->parse($sms->getPhoneNumber(), 'SK');
 			$rcptN = (int)Strings::trim(Strings::replace($pnu->format($parsed, PhoneNumberFormat::INTERNATIONAL), '% %', ''), '+');
 		} catch (\Throwable $ex) {
-			throw new EuroSmsException('invalid recipient number');
+			throw new EurosmsComException('invalid recipient number');
 		}
 
 		$isAscii = $sms->getMessage() === Strings::toAscii($sms->getMessage());
 		if (!$isAscii && !$this->unicode) {
-			throw new EuroSmsException('only ASCII text allowed');
+			throw new EurosmsComException('only ASCII text allowed');
 		}
 		$isLong = Strings::length($sms->getMessage()) > ($isAscii ? 160 : 70);
 		if ($isLong && !$this->long) {
-			throw new EuroSmsException('text too long');
+			throw new EurosmsComException('text too long');
 		}
 
 		$data = [
@@ -141,10 +141,10 @@ class EuroSmsProvider
 		try {
 			$respRaw = $this->client->request('GET', self::BALANCE_URI, $this->getGetBalanceData())->getBody()->getContents();
 		} catch (\Exception $e) {
-			throw new EuroSmsException($e->getMessage());
+			throw new EurosmsComException($e->getMessage());
 		}
 		if (strpos($respRaw, 'BAD_INT') !== false) {
-			throw new EuroSmsException('Bad integration key');
+			throw new EurosmsComException('Bad integration key');
 		}
 		return (float)$respRaw;
 	}
@@ -166,7 +166,7 @@ class EuroSmsProvider
 		if (Strings::match($id, '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/')) {
 			return $this->check3($id);
 		}
-		throw new EuroSmsException('invalid ID: ' . $id);
+		throw new EurosmsComException('invalid ID: ' . $id);
 	}
 
 	private function check1($id): string
@@ -176,12 +176,12 @@ class EuroSmsProvider
 			$resp = explode('|', $respRaw);
 
 			if ($resp[0] != 'ok') {
-				throw new EuroSmsException($respRaw);
+				throw new EurosmsComException($respRaw);
 			}
 
 			return trim($resp[1]);
 		} catch (\Exception $e) {
-			throw new EuroSmsException($e->getMessage() . "\n" . $respRaw);
+			throw new EurosmsComException($e->getMessage() . "\n" . $respRaw);
 		}
 	}
 
@@ -201,7 +201,7 @@ class EuroSmsProvider
 			$respRaw = $this->client->request('GET', self::SMS_STATUS_URI . $id, $this->getGetCheck3Data())->getBody()->getContents();
 			$respJson = json_decode($respRaw);
 		} catch (\Exception $e) {
-			throw new EuroSmsException($e->getMessage() . "\n" . $respRaw);
+			throw new EurosmsComException($e->getMessage() . "\n" . $respRaw);
 		}
 		if ($respJson->err_code == 'OK') {
 			switch ($respJson->dlr) {
@@ -226,7 +226,7 @@ class EuroSmsProvider
 					return '?' . $respJson->dlr;
 			}
 		}
-		throw new EuroSmsException($respRaw);
+		throw new EurosmsComException($respRaw);
 	}
 
 	private function getGetCheck3Data(): array

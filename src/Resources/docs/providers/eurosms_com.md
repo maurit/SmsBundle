@@ -14,7 +14,7 @@ Provider to connect with [EuroSMS](https://www.eurosms.com/) service.
 maurit_sms:
     providers:
         eurosms_provider_doc: # your custom provider name
-            euro_sms:
+            eurosms_com:
                 id: uid
                 key: userkey
 ```

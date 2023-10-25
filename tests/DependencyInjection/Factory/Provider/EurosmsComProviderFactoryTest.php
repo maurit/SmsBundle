@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace Maurit\Bundle\SmsBundle\Tests\DependencyInjection\Factory\Provider;
 
 
-use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\EuroSmsProviderFactory;
-use Maurit\Bundle\SmsBundle\Provider\EuroSmsProvider;
+use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\EurosmsComProviderFactory;
+use Maurit\Bundle\SmsBundle\Provider\EurosmsComProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Builder\BooleanNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition;
 
 
-class EuroSmsProviderFactoryTest
+class EurosmsComProviderFactoryTest
 	extends TestCase
 {
 	use ProviderTestTrait;
@@ -19,12 +19,12 @@ class EuroSmsProviderFactoryTest
 
 	public function testGetCorrectName(): void
 	{
-		$this->assertEquals('euro_sms', (new EuroSmsProviderFactory)->getName());
+		$this->assertEquals('eurosms_com', (new EurosmsComProviderFactory)->getName());
 	}
 
 	public function testConfigurationHasAllRequiredParameters(): void
 	{
-		$def = $this->getFactoryConfiguration(new EuroSmsProviderFactory);
+		$def = $this->getFactoryConfiguration(new EurosmsComProviderFactory);
 
 		$this->assertArrayHasKey('id', $def);
 		$this->assertArrayHasKey('key', $def);
@@ -35,7 +35,7 @@ class EuroSmsProviderFactoryTest
 
 	public function testConfigurationHasCorrectTypes(): void
 	{
-		$def = $this->getFactoryConfiguration(new EuroSmsProviderFactory);
+		$def = $this->getFactoryConfiguration(new EurosmsComProviderFactory);
 
 		$this->assertInstanceOf(ScalarNodeDefinition::class, $def['id']);
 		$this->assertInstanceOf(ScalarNodeDefinition::class, $def['key']);
@@ -46,8 +46,8 @@ class EuroSmsProviderFactoryTest
 
 	public function testThatDefinitionHasAllRequiredMethods(): void
 	{
-		$prototypeMethods = $this->getPrototypeMethods(new EuroSmsProvider);
-		$calls = $this->getDefinitionMethodCalls(new EuroSmsProviderFactory, ['id', 'key', 'test', 'unicode', 'long']);
+		$prototypeMethods = $this->getPrototypeMethods(new EurosmsComProvider);
+		$calls = $this->getDefinitionMethodCalls(new EurosmsComProviderFactory, ['id', 'key', 'test', 'unicode', 'long']);
 
 		foreach ($calls as $call) {
 			$this->assertContains($call, $prototypeMethods);

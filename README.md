@@ -14,7 +14,7 @@ $ composer require maurit/sms-bundle ^1.0
 
 You can define as many provider configurations as you want. Available providers are:
  
- * [EuroSMS](src/Resources/docs/providers/euro_sms.md) [eurosms.com]
+ * [EuroSMS com](src/Resources/docs/providers/eurosms_com.md) [eurosms.com]
  * [Message Bird](src/Resources/docs/providers/message_bird.md) [messagebird.com]
  * [Sms Ru](src/Resources/docs/providers/sms_ru.md) [sms.ru]
  * [Sms Aero](src/Resources/docs/providers/sms_aero.md) [smsaero.ru]

@@ -8,17 +8,17 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 
 
-class EuroSmsProviderFactory
+class EurosmsComProviderFactory
 	extends AbstractProviderFactory
 {
 	public function getName(): string
 	{
-		return 'euro_sms';
+		return 'eurosms_com';
 	}
 
 	public function getDefinition(array $config): ChildDefinition
 	{
-		return (new ChildDefinition('maurit_sms.prototype.provider.euro_sms'))
+		return (new ChildDefinition('maurit_sms.prototype.provider.eurosms_com'))
 			->addMethodCall('setId', [$config['id']])
 			->addMethodCall('setKey', [$config['key']])
 			->addMethodCall('setTest', [$config['test']])
