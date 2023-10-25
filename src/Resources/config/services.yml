@@ -20,6 +20,9 @@ services:
     maurit_sms.prototype.provider.eurosms_com:
         class: Maurit\Bundle\SmsBundle\Provider\EurosmsComProvider
 
+    maurit_sms.prototype.provider.sms_brana_sk:
+        class: Maurit\Bundle\SmsBundle\Provider\SmsBranaSkProvider
+
     maurit_sms.provider.manager:
         class: Maurit\Bundle\SmsBundle\Service\ProviderManager
 
