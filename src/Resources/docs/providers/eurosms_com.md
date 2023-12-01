@@ -1,6 +1,7 @@
 # EuroSMS (APIv3)
 
 Provider to connect with [EuroSMS](https://www.eurosms.com/) service.
+- [API docs](https://www.eurosms.com/sms/docs/SMS.API.v-3.1.15.pdf)
 
 ## Parameters
 

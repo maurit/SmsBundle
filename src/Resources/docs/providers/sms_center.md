@@ -1,6 +1,7 @@
 # Sms Center
 
 Provider to connect with [Sms Center](https://smsc.ru/) service.
+- [API docs](https://smsc.ru/api/http/send/sms)
 
 ## Parameters
 

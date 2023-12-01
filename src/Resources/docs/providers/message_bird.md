@@ -1,6 +1,7 @@
 # Message Bird
 
 Provider to connect with [Message Bird](https://www.messagebird.com/) service.
+- [SMS API](https://developers.messagebird.com/api/sms-messaging/)
 
 ## Parameters
 

@@ -1,6 +1,7 @@
 # Sms Discount
 
 Provider to connect with [Sms Discount](https://iqsms.ru) service.
+- [API docs](https://iqsms.ru/api/api_rest/)
 
 ## Parameters
 

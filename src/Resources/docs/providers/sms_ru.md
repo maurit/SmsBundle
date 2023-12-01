@@ -1,6 +1,7 @@
 # Sms Ru
 
 Provider to connect with [Sms Ru](https://sms.ru) service.
+- [API docs](https://sms.ru/api)
 
 ## Parameters
 

@@ -1,6 +1,7 @@
 # Sms Aero
 
 Provider to connect with [Sms Aero](https://smsaero.ru/) service.
+- [API docs](https://smsaero.ru/integration/documentation/api/)
 
 ## Parameters
 

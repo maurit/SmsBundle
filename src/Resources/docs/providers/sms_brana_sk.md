@@ -1,6 +1,7 @@
 # SmsBrana sk
 
 Provider to connect with [Sms-Brana sk](https://www.sms-brana.sk/) service.
+- [API docs](https://www.mojoperator.sk/doc/sms-odosielanie-sms-brana-sk)
 
 ## Parameters
 
