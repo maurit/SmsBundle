@@ -10,6 +10,7 @@ use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\SmsAeroProvider
 use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\SmsBranaSkProviderFactory;
 use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\SmsCenterProviderFactory;
 use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\SmsDiscountProviderFactory;
+use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\SmsgateSkProviderFactory;
 use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\SmsRuProviderFactory;
 use Maurit\Bundle\SmsBundle\DependencyInjection\SmsExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -36,6 +37,7 @@ class SmsBundle
 		$extension->addProviderFactory(new SmsCenterProviderFactory);
 		$extension->addProviderFactory(new EurosmsComProviderFactory);
 		$extension->addProviderFactory(new SmsBranaSkProviderFactory);
+		$extension->addProviderFactory(new SmsgateSkProviderFactory);
 
 		return $extension;
 	}

@@ -23,6 +23,9 @@ services:
     maurit_sms.prototype.provider.sms_brana_sk:
         class: Maurit\Bundle\SmsBundle\Provider\SmsBranaSkProvider
 
+    maurit_sms.prototype.provider.smsgate_sk:
+        class: Maurit\Bundle\SmsBundle\Provider\SmsgateSkProvider
+
     maurit_sms.provider.manager:
         class: Maurit\Bundle\SmsBundle\Service\ProviderManager
 

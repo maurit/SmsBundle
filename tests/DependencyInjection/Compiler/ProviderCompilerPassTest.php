@@ -11,6 +11,7 @@ use Maurit\Bundle\SmsBundle\Provider\SmsAeroProvider;
 use Maurit\Bundle\SmsBundle\Provider\SmsBranaSkProvider;
 use Maurit\Bundle\SmsBundle\Provider\SmsCenterProvider;
 use Maurit\Bundle\SmsBundle\Provider\SmsDiscountProvider;
+use Maurit\Bundle\SmsBundle\Provider\SmsgateSkProvider;
 use Maurit\Bundle\SmsBundle\Provider\SmsRuProvider;
 use Maurit\Bundle\SmsBundle\Service\ProviderManager;
 use PHPUnit\Framework\TestCase;
@@ -32,7 +33,8 @@ class ProviderCompilerPassTest
 			SmsDiscountProvider::class => $this->getProviderDefinition(SmsDiscountProvider::class),
 			SmsAeroProvider::class => $this->getProviderDefinition(SmsAeroProvider::class),
 			EurosmsComProvider::class => $this->getProviderDefinition(EurosmsComProvider::class),
-			SmsBranaSkProvider::class => $this->getProviderDefinition(SmsBranaSkProvider::class)
+			SmsBranaSkProvider::class => $this->getProviderDefinition(SmsBranaSkProvider::class),
+			SmsgateSkProvider::class => $this->getProviderDefinition(SmsgateSkProvider::class)
 		]);
 
 		(new ProviderCompilerPass)->process($container);
@@ -45,6 +47,7 @@ class ProviderCompilerPassTest
 		$this->assertInstanceOf(SmsAeroProvider::class, $service->getProvider(SmsAeroProvider::class));
 		$this->assertInstanceOf(EurosmsComProvider::class, $service->getProvider(EurosmsComProvider::class));
 		$this->assertInstanceOf(SmsBranaSkProvider::class, $service->getProvider(SmsBranaSkProvider::class));
+		$this->assertInstanceOf(SmsgateSkProvider::class, $service->getProvider(SmsgateSkProvider::class));
 	}
 
 	protected function getProviderDefinition(string $class): Definition

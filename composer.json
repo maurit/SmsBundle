@@ -3,7 +3,7 @@
     "type": "symfony-bundle",
     "description": "Sms sending system with different providers",
     "keywords": [
-        "Sms", "eurosms.com", "sms.ru", "smsaero.ru", "iqsms.ru", "smsc.ru", "messagebird.com"
+        "Sms", "eurosms.com", "sms-brana.sk", "smsgate.sk", "sms.ru", "smsaero.ru", "iqsms.ru", "smsc.ru", "messagebird.com"
     ],
     "license": "MIT",
     "homepage": "https://github.com/Maurit/SmsBundle",
@@ -21,6 +21,7 @@
     "require": {
         "php": ">=7.4.0",
         "ext-intl": "*",
+        "ext-json": "*",
         "symfony/framework-bundle": "^6.0",
         "guzzlehttp/guzzle": "^7.5",
         "nette/utils": "^3.2",
