@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Tests\DependencyInjection\Factory\Provider;
 
-
 use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\SmsDiscountProviderFactory;
 use Maurit\Bundle\SmsBundle\Provider\SmsDiscountProvider;
 use PHPUnit\Framework\TestCase;
@@ -16,29 +15,30 @@ class SmsDiscountProviderFactoryTest
 {
 	use ProviderTestTrait;
 
+
 	public function testGetCorrectName(): void
 	{
-		$this->assertEquals('sms_discount', (new SmsDiscountProviderFactory)->getName());
+		self::assertEquals('sms_discount', (new SmsDiscountProviderFactory)->getName());
 	}
 
 	public function testConfigurationHasAllRequiredParameters(): void
 	{
 		$def = $this->getFactoryConfiguration(new SmsDiscountProviderFactory);
 
-		$this->assertArrayHasKey('login', $def);
-		$this->assertArrayHasKey('password', $def);
-		$this->assertArrayHasKey('sender', $def);
-		$this->assertArrayHasKey('flash', $def);
+		self::assertArrayHasKey('login', $def);
+		self::assertArrayHasKey('password', $def);
+		self::assertArrayHasKey('sender', $def);
+		self::assertArrayHasKey('flash', $def);
 	}
 
 	public function testConfigurationHasCorrectTypes(): void
 	{
 		$def = $this->getFactoryConfiguration(new SmsDiscountProviderFactory);
 
-		$this->assertInstanceOf(ScalarNodeDefinition::class, $def['login']);
-		$this->assertInstanceOf(ScalarNodeDefinition::class, $def['password']);
-		$this->assertInstanceOf(ScalarNodeDefinition::class, $def['sender']);
-		$this->assertInstanceOf(BooleanNodeDefinition::class, $def['flash']);
+		self::assertInstanceOf(ScalarNodeDefinition::class, $def['login']);
+		self::assertInstanceOf(ScalarNodeDefinition::class, $def['password']);
+		self::assertInstanceOf(ScalarNodeDefinition::class, $def['sender']);
+		self::assertInstanceOf(BooleanNodeDefinition::class, $def['flash']);
 	}
 
 	public function testThatDefinitionHasAllRequiredMethods(): void
@@ -47,7 +47,7 @@ class SmsDiscountProviderFactoryTest
 		$calls = $this->getDefinitionMethodCalls(new SmsDiscountProviderFactory, ['login', 'password', 'sender', 'flash']);
 
 		foreach ($calls as $call) {
-			$this->assertContains($call, $prototypeMethods);
+			self::assertContains($call, $prototypeMethods);
 		}
 	}
 }

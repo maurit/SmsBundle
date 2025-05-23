@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Provider;
 
@@ -16,12 +15,9 @@ class SmsBranaSkProvider
 	private const SMS_SEND_URI = 'https://api.sms-brana.org/https/send_sms.php';
 	private const SMS_STATUS_URI = 'https://api.sms-brana.org/https/check_status.php';
 
-	/** @var string */
-	private $login;
-	/** @var ClientInterface */
-	private $client;
-	/** @var string */
-	private $password;
+	private string $login = '';
+	private ClientInterface $client;
+	private string $password = '';
 
 
 	public function __construct()
@@ -61,7 +57,7 @@ class SmsBranaSkProvider
 
 	private function getGetSendData(SmsInterface $sms): array
 	{
-		if (empty($sms->getSender())) {
+		if (($sender = $sms->getSender()) === null || $sender === '') {
 			throw new SmsBranaSkException('Sender was not set');
 		}
 		return [
@@ -78,7 +74,7 @@ class SmsBranaSkProvider
 
 	public function balance(): float
 	{
-		return 0;
+		return 0.0;
 	}
 
 	public function check($id): string

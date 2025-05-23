@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Tests\DependencyInjection\Factory\Provider;
 
-
 use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\AbstractProviderFactory;
 use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\ProviderFactoryInterface;
 use PHPUnit\Framework\TestCase;
@@ -22,8 +21,8 @@ class AbstractProviderFactoryTest
 
 		$provider->setProviderDefinition($container, 'simple_provider_name', $provider->getDefinition([]));
 
-		$this->assertTrue($container->has('maurit_sms.provider.simple_provider_name'));
-		$this->assertEquals('maurit_sms.provider.simple_provider_name', key(
+		self::assertTrue($container->has('maurit_sms.provider.simple_provider_name'));
+		self::assertEquals('maurit_sms.provider.simple_provider_name', key(
 				$container->findTaggedServiceIds(AbstractProviderFactory::SERVICE_TAG))
 		);
 	}

@@ -1,20 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\DependencyInjection;
-
 
 use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\ProviderFactoryInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 
 class SmsExtension
 	extends Extension
 {
 	/** @var ProviderFactoryInterface[] */
-	private $providerFactoryMap = [];
+	private array $providerFactoryMap = [];
 
 
 	public function addProviderFactory(ProviderFactoryInterface $providerFactory): void

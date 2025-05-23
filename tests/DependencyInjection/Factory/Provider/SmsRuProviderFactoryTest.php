@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Tests\DependencyInjection\Factory\Provider;
 
-
 use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\SmsRuProviderFactory;
 use Maurit\Bundle\SmsBundle\Provider\SmsRuProvider;
 use PHPUnit\Framework\TestCase;
@@ -16,27 +15,28 @@ class SmsRuProviderFactoryTest
 {
 	use ProviderTestTrait;
 
+
 	public function testGetCorrectName(): void
 	{
-		$this->assertEquals('sms_ru', (new SmsRuProviderFactory)->getName());
+		self::assertEquals('sms_ru', (new SmsRuProviderFactory)->getName());
 	}
 
 	public function testConfigurationHasAllRequiredParameters(): void
 	{
 		$def = $this->getFactoryConfiguration(new SmsRuProviderFactory);
 
-		$this->assertArrayHasKey('api_id', $def);
-		$this->assertArrayHasKey('from', $def);
-		$this->assertArrayHasKey('test', $def);
+		self::assertArrayHasKey('api_id', $def);
+		self::assertArrayHasKey('from', $def);
+		self::assertArrayHasKey('test', $def);
 	}
 
 	public function testConfigurationHasCorrectTypes(): void
 	{
 		$def = $this->getFactoryConfiguration(new SmsRuProviderFactory);
 
-		$this->assertInstanceOf(ScalarNodeDefinition::class, $def['api_id']);
-		$this->assertInstanceOf(ScalarNodeDefinition::class, $def['from']);
-		$this->assertInstanceOf(BooleanNodeDefinition::class, $def['test']);
+		self::assertInstanceOf(ScalarNodeDefinition::class, $def['api_id']);
+		self::assertInstanceOf(ScalarNodeDefinition::class, $def['from']);
+		self::assertInstanceOf(BooleanNodeDefinition::class, $def['test']);
 	}
 
 	public function testThatDefinitionHasAllRequiredMethods(): void
@@ -45,7 +45,7 @@ class SmsRuProviderFactoryTest
 		$calls = $this->getDefinitionMethodCalls(new SmsRuProviderFactory, ['api_id', 'from', 'test']);
 
 		foreach ($calls as $call) {
-			$this->assertContains($call, $prototypeMethods);
+			self::assertContains($call, $prototypeMethods);
 		}
 	}
 }

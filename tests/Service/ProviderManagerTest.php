@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Tests\Service;
 
-
 use Maurit\Bundle\SmsBundle\Service\ProviderManager;
 use Maurit\Bundle\SmsBundle\Tests\Fixture\Provider\ProviderFixture;
 use PHPUnit\Framework\TestCase;
@@ -34,6 +33,6 @@ class ProviderManagerTest
 
 		$pm->addProvider($name, $provider);
 
-		$this->assertEquals($provider, $pm->getProvider($name));
+		self::assertEquals($provider, $pm->getProvider($name));
 	}
 }

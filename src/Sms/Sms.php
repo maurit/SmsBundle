@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Sms;
 
@@ -7,17 +6,13 @@ namespace Maurit\Bundle\SmsBundle\Sms;
 class Sms
 	implements SmsInterface
 {
-	/** @var string */
-	private $phoneNumber;
-	/** @var string */
-	private $message;
-	/** @var \DateTime */
-	private $dateTime;
-	/** @var string */
-	private $sender;
+	private string $phoneNumber;
+	private string $message;
+	private \DateTime $dateTime;
+	private string $sender;
 
 
-	public function __construct(string $phoneNumber, string $message, \DateTime $dateTime = null, ?string $sender = '')
+	public function __construct(string $phoneNumber, string $message, ?\DateTime $dateTime = null, ?string $sender = '')
 	{
 		$this->setPhoneNumber($phoneNumber);
 		$this->setMessage($message);
@@ -33,7 +28,6 @@ class Sms
 	public function setMessage(string $message): self
 	{
 		$this->message = $message;
-
 		return $this;
 	}
 
@@ -45,7 +39,6 @@ class Sms
 	public function setPhoneNumber(string $phoneNumber): self
 	{
 		$this->phoneNumber = $phoneNumber;
-
 		return $this;
 	}
 
@@ -57,7 +50,6 @@ class Sms
 	public function setDateTime(\DateTime $dateTime): self
 	{
 		$this->dateTime = $dateTime;
-
 		return $this;
 	}
 
@@ -69,7 +61,6 @@ class Sms
 	public function setSender(string $sender): self
 	{
 		$this->sender = $sender;
-
 		return $this;
 	}
 }

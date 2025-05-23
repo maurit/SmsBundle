@@ -14,29 +14,30 @@ class SmsAeroProviderFactoryTest
 {
 	use ProviderTestTrait;
 
+
 	public function testGetCorrectName(): void
 	{
-		$this->assertEquals('sms_aero', (new SmsAeroProviderFactory)->getName());
+		self::assertEquals('sms_aero', (new SmsAeroProviderFactory)->getName());
 	}
 
 	public function testConfigurationHasAllRequiredParameters(): void
 	{
 		$def = $this->getFactoryConfiguration(new SmsAeroProviderFactory);
 
-		$this->assertArrayHasKey('user', $def);
-		$this->assertArrayHasKey('api_key', $def);
-		$this->assertArrayHasKey('sign', $def);
-		$this->assertArrayHasKey('channel', $def);
+		self::assertArrayHasKey('user', $def);
+		self::assertArrayHasKey('api_key', $def);
+		self::assertArrayHasKey('sign', $def);
+		self::assertArrayHasKey('channel', $def);
 	}
 
 	public function testConfigurationHasCorrectTypes(): void
 	{
 		$def = $this->getFactoryConfiguration(new SmsAeroProviderFactory);
 
-		$this->assertInstanceOf(ScalarNodeDefinition::class, $def['user']);
-		$this->assertInstanceOf(ScalarNodeDefinition::class, $def['api_key']);
-		$this->assertInstanceOf(ScalarNodeDefinition::class, $def['sign']);
-		$this->assertInstanceOf(ScalarNodeDefinition::class, $def['channel']);
+		self::assertInstanceOf(ScalarNodeDefinition::class, $def['user']);
+		self::assertInstanceOf(ScalarNodeDefinition::class, $def['api_key']);
+		self::assertInstanceOf(ScalarNodeDefinition::class, $def['sign']);
+		self::assertInstanceOf(ScalarNodeDefinition::class, $def['channel']);
 	}
 
 	public function testThatDefinitionHasAllRequiredMethods(): void
@@ -45,7 +46,7 @@ class SmsAeroProviderFactoryTest
 		$calls = $this->getDefinitionMethodCalls(new SmsAeroProviderFactory, ['user', 'api_key', 'sign', 'channel']);
 
 		foreach ($calls as $call) {
-			$this->assertContains($call, $prototypeMethods);
+			self::assertContains($call, $prototypeMethods);
 		}
 	}
 }

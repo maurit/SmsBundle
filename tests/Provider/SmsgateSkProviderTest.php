@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Tests\Provider;
 
@@ -23,7 +22,7 @@ class SmsgateSkProviderTest
 			->setToken('token')
 			->setClient(new Client);
 
-		$this->assertInstanceOf(SmsgateSkProvider::class, $provider);
+		self::assertInstanceOf(SmsgateSkProvider::class, $provider);
 	}
 
 	public function testThatExceptionThrownOnMissingSender(): void
@@ -42,7 +41,7 @@ class SmsgateSkProviderTest
 			->setToken('token')
 			->send(new Sms('+420766121212', 'Hello World', null, 'Tester'));
 
-		$this->assertSame(100427, $response);
+		self::assertSame(100427, $response);
 	}
 
 	public function testCheck(): void
@@ -51,7 +50,7 @@ class SmsgateSkProviderTest
 			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{"result":{"status":"success","description":"","code":"OK"},"message_id":"154786","status":"Doručená","statusId":4,"code":"DELIVERED","deliveryDateTime":"2023-11-28 17:24:08"}')))
 			->check('cdef60d8-52a5-47b3-984b-c15c54c196f1');
 
-		$this->assertSame('DELIVERED', $response);
+		self::assertSame('DELIVERED', $response);
 	}
 
 	public function testBalance(): void
@@ -60,6 +59,6 @@ class SmsgateSkProviderTest
 			->setClient($this->getClientWithPreparedResponse(new Response(200, [], "80.693 EUR\n")))
 			->balance();
 
-		$this->assertSame(0.0, $response);
+		self::assertSame(0.0, $response);
 	}
 }

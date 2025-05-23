@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Tests\Provider;
 
-
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Maurit\Bundle\SmsBundle\Exception\SmsAeroException;
@@ -17,6 +16,7 @@ class SmsAeroProviderTest
 {
 	use GuzzleClientTrait;
 
+
 	public function testThatSettersImplementsChainPattern(): void
 	{
 		$provider = (new SmsAeroProvider)
@@ -26,7 +26,7 @@ class SmsAeroProviderTest
 			->setSign('sign')
 			->setClient(new Client());
 
-		$this->assertInstanceOf(SmsAeroProvider::class, $provider);
+		self::assertInstanceOf(SmsAeroProvider::class, $provider);
 	}
 
 	public function testThatExceptionThrownOnInvalidResponseCode(): void
@@ -41,10 +41,27 @@ class SmsAeroProviderTest
 	public function testSend(): void
 	{
 		$response = (new SmsAeroProvider)
-			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{"success": true}')))
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "from": "SMS Aero",
+            "number": "+1234567890",
+            "text": "Hello World",
+            "status": 0,
+            "extendStatus": "queue",
+            "channel": "FREE SIGN",
+            "cost": 1.95,
+            "dateCreate": 1510656981,
+            "dateSend": 1510656981
+        }
+    ],
+    "message": null
+}')))
 			->send(new Sms('+1234567890', 'Hello World'));
 
-		$this->assertTrue($response);
+		self::assertSame(1, $response);
 	}
 
 	public function testCheck(): void
@@ -69,13 +86,13 @@ class SmsAeroProviderTest
     }')))
 			->check(1);
 
-		$this->assertSame('delivery', $response);
+		self::assertSame('delivery', $response);
 	}
 
 	public function testBalance(): void
 	{
 		$response = (new SmsAeroProvider)
-			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '    {
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{
         "success": true,
         "data": {
             "balance": 1389.26
@@ -84,6 +101,6 @@ class SmsAeroProviderTest
     }')))
 			->balance();
 
-		$this->assertSame(1389.26, $response);
+		self::assertSame(1389.26, $response);
 	}
 }

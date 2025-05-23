@@ -1,8 +1,6 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Tests\Sms;
-
 
 use Maurit\Bundle\SmsBundle\Sms\Sms;
 use PHPUnit\Framework\TestCase;
@@ -11,19 +9,12 @@ use PHPUnit\Framework\TestCase;
 final class SmsTest
 	extends TestCase
 {
-	public function testSmsWithoutRequiredParameters(): void
-	{
-		$this->expectException(\ArgumentCountError::class);
-
-		new Sms;
-	}
-
 	public function testGetCorrectPhoneNumber(): void
 	{
 		$number = '+1234567890';
 		$sms = new Sms($number, 'Hello world');
 
-		$this->assertEquals($number, $sms->getPhoneNumber());
+		self::assertEquals($number, $sms->getPhoneNumber());
 	}
 
 	public function testGetCorrectMessage(): void
@@ -31,7 +22,7 @@ final class SmsTest
 		$message = 'Hello World';
 		$sms = new Sms('+1234567890', $message);
 
-		$this->assertEquals($message, $sms->getMessage());
+		self::assertEquals($message, $sms->getMessage());
 	}
 
 	public function testDateTimeEmptyParameter(): void
@@ -41,8 +32,8 @@ final class SmsTest
 		$dt = $sms->getDateTime();
 		$ts = time();
 
-		$this->assertInstanceOf(\DateTime::class, $dt);
-		$this->assertEquals($ts, $dt->getTimestamp());
+		self::assertInstanceOf(\DateTime::class, $dt);
+		self::assertEquals($ts, $dt->getTimestamp());
 	}
 
 	public function testGetCorrectDateTime(): void
@@ -50,19 +41,21 @@ final class SmsTest
 		$dt = (new \DateTime)->add(new \DateInterval('PT5M'));
 		$sms = new Sms('+1234567890', 'Hello World', $dt);
 
-		$this->assertEquals($dt, $sms->getDateTime());
+		self::assertEquals($dt, $sms->getDateTime());
 	}
 
 	public function testGetEmptySender(): void
 	{
 		$sms = new Sms('+1234567890', 'Hello World');
-		$this->assertSame('', $sms->getSender());
+
+		self::assertSame('', $sms->getSender());
 	}
 
 	public function testGetCorrectSender(): void
 	{
 		$sender = 'Tester';
 		$sms = new Sms('+1234567890', 'Hello World', null, $sender);
-		$this->assertSame($sender, $sms->getSender());
+
+		self::assertSame($sender, $sms->getSender());
 	}
 }

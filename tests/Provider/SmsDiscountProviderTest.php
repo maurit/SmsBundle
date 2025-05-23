@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Tests\Provider;
 
-
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Maurit\Bundle\SmsBundle\Exception\SmsDiscountException;
@@ -17,6 +16,7 @@ class SmsDiscountProviderTest
 {
 	use GuzzleClientTrait;
 
+
 	public function testThatSettersImplementsChainPattern(): void
 	{
 		$provider = (new SmsDiscountProvider)
@@ -26,7 +26,7 @@ class SmsDiscountProviderTest
 			->setFlash(true)
 			->setClient(new Client);
 
-		$this->assertInstanceOf(SmsDiscountProvider::class, $provider);
+		self::assertInstanceOf(SmsDiscountProvider::class, $provider);
 	}
 
 	public function testThatExceptionThrownOnInvalidResponseCode(): void
@@ -41,10 +41,10 @@ class SmsDiscountProviderTest
 	public function testSend(): void
 	{
 		$response = (new SmsDiscountProvider)
-			->setClient($this->getClientWithPreparedResponse(new Response(200, [], 'accepted')))
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], 'accepted;A132571BC')))
 			->send(new Sms('+1234567890', 'Hello World'));
 
-		$this->assertTrue($response);
+		self::assertSame('A132571BC', $response);
 	}
 
 	public function testSendWithAdditionalPostData(): void
@@ -52,10 +52,10 @@ class SmsDiscountProviderTest
 		$response = (new SmsDiscountProvider)
 			->setSender('sender')
 			->setFlash(true)
-			->setClient($this->getClientWithPreparedResponse(new Response(200, [], 'accepted')))
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], 'accepted;A132571BC')))
 			->send(new Sms('+1234567890', 'Hello World'));
 
-		$this->assertTrue($response);
+		self::assertSame('A132571BC', $response);
 	}
 
 	public function testCheck(): void
@@ -64,7 +64,7 @@ class SmsDiscountProviderTest
 			->setClient($this->getClientWithPreparedResponse(new Response(200, [], 'A132571BC;delivered')))
 			->check('A132571BC');
 
-		$this->assertSame('delivered', $response);
+		self::assertSame('delivered', $response);
 	}
 
 	public function testBalance(): void
@@ -73,6 +73,6 @@ class SmsDiscountProviderTest
 			->setClient($this->getClientWithPreparedResponse(new Response(200, [], 'RUB;540.15')))
 			->balance();
 
-		$this->assertSame(540.15, $response);
+		self::assertSame(540.15, $response);
 	}
 }

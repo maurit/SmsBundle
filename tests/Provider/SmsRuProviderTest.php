@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Tests\Provider;
 
-
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Maurit\Bundle\SmsBundle\Exception\SmsRuException;
@@ -17,6 +16,7 @@ class SmsRuProviderTest
 {
 	use GuzzleClientTrait;
 
+
 	public function testThatSettersImplementsChainPattern(): void
 	{
 		$provider = (new SmsRuProvider)
@@ -25,7 +25,7 @@ class SmsRuProviderTest
 			->setTest(false)
 			->setClient(new Client);
 
-		$this->assertInstanceOf(SmsRuProvider::class, $provider);
+		self::assertInstanceOf(SmsRuProvider::class, $provider);
 	}
 
 	public function testThatExceptionThrownOnInvalidResponseCode(): void
@@ -33,17 +33,33 @@ class SmsRuProviderTest
 		$this->expectException(SmsRuException::class);
 
 		(new SmsRuProvider)
-			->setClient($this->getClientWithPreparedResponse(new Response(200, [], 302)))
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{"status":"error","status_code":302, "sms":{}}')))
 			->send(new Sms('+1234567890', 'Hello World'));
 	}
 
 	public function testSend(): void
 	{
 		$response = (new SmsRuProvider)
-			->setClient($this->getClientWithPreparedResponse(new Response(200, [], 100)))
+			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{
+    "status": "OK",
+    "status_code": 100,
+    "sms": {
+        "79255070602": {
+            "status": "OK",
+            "status_code": 100,
+            "sms_id": "000000-10000000"
+        },
+        "74993221627": {
+            "status": "ERROR",
+            "status_code": 207,
+            "status_text": "На этот номер (или один из номеров) нельзя отправлять сообщения, либо указано более 100 номеров в списке получателей"
+        }
+    } ,
+    "balance": 4122.56
+}')))
 			->send(new Sms('+1234567890', 'Hello World'));
 
-		$this->assertTrue($response);
+		self::assertEquals('79255070602', $response);
 	}
 
 	public function testCheck(): void
@@ -64,7 +80,7 @@ class SmsRuProviderTest
 }')))
 			->check('000000-000001');
 
-		$this->assertSame('Сообщение доставлено', $response);
+		self::assertSame('Сообщение доставлено', $response);
 	}
 
 	public function testBalance(): void
@@ -77,6 +93,6 @@ class SmsRuProviderTest
 }')))
 			->balance();
 
-		$this->assertSame(4762.58, $response);
+		self::assertSame(4762.58, $response);
 	}
 }

@@ -1,10 +1,10 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Provider;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\RequestOptions;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use Maurit\Bundle\SmsBundle\Exception\SmsgateSkException;
@@ -19,14 +19,10 @@ class SmsgateSkProvider
 //	private const API_XML_URI = 'https://api.smsgate.sk/xml';
 //	private const API_SOAP_URI = 'https://api.smsgate.sk/soap';
 
-	/** @var string */
-	private $token;
-	/** @var ClientInterface */
-	private $client;
-	/** @var bool */
-	private $textNumbers;
-	/** @var bool */
-	private $unicode;
+	private string $token = '';
+	private ClientInterface $client;
+	private bool $textNumbers = false;
+	private bool $unicode;
 
 
 	public function __construct()
@@ -46,7 +42,7 @@ class SmsgateSkProvider
 		return $this;
 	}
 
-	public function setTextNumbers(bool $textNumbers): self
+	public function setTextNumbers(bool $textNumbers = true): self
 	{
 		$this->textNumbers = $textNumbers;
 		return $this;
@@ -58,7 +54,7 @@ class SmsgateSkProvider
 		return $this;
 	}
 
-	public function send(SmsInterface $sms)
+	public function send(SmsInterface $sms): int
 	{
 		try {
 			$respRaw = $this->client->request('POST', self::API_JSON_URI . '/send_message', $this->getPostSendData($sms))->getBody()->getContents();
@@ -66,7 +62,7 @@ class SmsgateSkProvider
 		} catch (\Exception $e) {
 			throw new SmsgateSkException($e->getMessage());
 		}
-		if ($respJson['result']['code'] !== 'OK') {
+		if ($respJson['result']['code'] !== 'OK' || $respJson['messages'][0]['code'] !== 'OK') {
 			throw new SmsgateSkException($respJson->result->code);
 		}
 		return $respJson['messages'][0]['message_id'];
@@ -93,7 +89,7 @@ class SmsgateSkProvider
 
 	private function getPostSendData(SmsInterface $sms): array
 	{
-		if (empty($sms->getSender())) {
+		if (($sender = $sms->getSender()) === null || $sender === '') {
 			throw new SmsgateSkException('Sender was not set');
 		}
 
@@ -110,37 +106,35 @@ class SmsgateSkProvider
 		}
 
 		$data = [
-			'headers' => [
+			RequestOptions::HEADERS => [
 				'accept' => 'application/json'
 			],
-			'json' => [
+			RequestOptions::JSON => [
 				'token' => $this->token,
 				'to' => $rcptS,
 				'text' => $sms->getMessage(),
 				'concat' => 3,
-				'unicode' => !$isAscii
+				'unicode' => !$isAscii,
+				'delivery_time' => $sms->getDateTime()->format('Y-m-d H:i:s')
 			]
 		];
 		if ($this->textNumbers) {
-			$data['json']['from'] = $sms->getSender();
-		}
-		if ($sms->getDateTime()) {
-			$data['json']['delivery_time'] = $sms->getDateTime()->format('Y-m-d H:i:s');
+			$data[RequestOptions::JSON]['from'] = $sms->getSender() ?? '';
 		}
 		return $data;
 	}
 
 	private function getPostCheckData($id): array
 	{
-		if (empty($id)) {
+		if ('' === (string)$id) {
 			throw new SmsgateSkException('Id was not set');
 		}
 
 		return [
-			'headers' => [
+			RequestOptions::HEADERS => [
 				'accept' => 'application/json'
 			],
-			'json' => [
+			RequestOptions::JSON => [
 				'token' => $this->token,
 				'message_id' => $id
 			]

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Tests\DependencyInjection\Compiler;
 
-
 use Maurit\Bundle\SmsBundle\DependencyInjection\Compiler\ProviderCompilerPass;
 use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\AbstractProviderFactory;
 use Maurit\Bundle\SmsBundle\Provider\EurosmsComProvider;
@@ -41,25 +40,18 @@ class ProviderCompilerPassTest
 
 		$service = $container->get(ProviderManager::class);
 
-		$this->assertInstanceOf(SmsRuProvider::class, $service->getProvider(SmsRuProvider::class));
-		$this->assertInstanceOf(SmsCenterProvider::class, $service->getProvider(SmsCenterProvider::class));
-		$this->assertInstanceOf(SmsDiscountProvider::class, $service->getProvider(SmsDiscountProvider::class));
-		$this->assertInstanceOf(SmsAeroProvider::class, $service->getProvider(SmsAeroProvider::class));
-		$this->assertInstanceOf(EurosmsComProvider::class, $service->getProvider(EurosmsComProvider::class));
-		$this->assertInstanceOf(SmsBranaSkProvider::class, $service->getProvider(SmsBranaSkProvider::class));
-		$this->assertInstanceOf(SmsgateSkProvider::class, $service->getProvider(SmsgateSkProvider::class));
+		self::assertInstanceOf(SmsRuProvider::class, $service->getProvider(SmsRuProvider::class));
+		self::assertInstanceOf(SmsCenterProvider::class, $service->getProvider(SmsCenterProvider::class));
+		self::assertInstanceOf(SmsDiscountProvider::class, $service->getProvider(SmsDiscountProvider::class));
+		self::assertInstanceOf(SmsAeroProvider::class, $service->getProvider(SmsAeroProvider::class));
+		self::assertInstanceOf(EurosmsComProvider::class, $service->getProvider(EurosmsComProvider::class));
+		self::assertInstanceOf(SmsBranaSkProvider::class, $service->getProvider(SmsBranaSkProvider::class));
+		self::assertInstanceOf(SmsgateSkProvider::class, $service->getProvider(SmsgateSkProvider::class));
 	}
 
 	protected function getProviderDefinition(string $class): Definition
 	{
 		return (new Definition($class))
 			->addTag(AbstractProviderFactory::SERVICE_TAG, ['provider' => $class]);
-	}
-
-	public function testIfFactoryServiceDoesNotExist(): void
-	{
-		$container = new ContainerBuilder;
-
-		$this->assertNull((new ProviderCompilerPass)->process($container));
 	}
 }

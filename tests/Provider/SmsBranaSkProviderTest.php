@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Tests\Provider;
 
@@ -24,7 +23,7 @@ class SmsBranaSkProviderTest
 			->setPassword('password')
 			->setClient(new Client);
 
-		$this->assertInstanceOf(SmsBranaSkProvider::class, $provider);
+		self::assertInstanceOf(SmsBranaSkProvider::class, $provider);
 	}
 
 	public function testThatExceptionThrownOnMissingSender(): void
@@ -43,7 +42,7 @@ class SmsBranaSkProviderTest
 			->setLogin('login')
 			->send(new Sms('+420766121212', 'Hello World', null, 'Tester'));
 
-		$this->assertSame('0d39b9cd0e0ef5e4df8f5a877eafb81c', $response);
+		self::assertSame('0d39b9cd0e0ef5e4df8f5a877eafb81c', $response);
 	}
 
 	public function testCheck(): void
@@ -52,7 +51,7 @@ class SmsBranaSkProviderTest
 			->setClient($this->getClientWithPreparedResponse(new Response(200, [], 'STATUS:ID:1')))
 			->check('0d39b9cd0e0ef5e4df8f5a877eafb81c');
 
-		$this->assertSame('1', $response);
+		self::assertSame('1', $response);
 	}
 
 	public function testBalance(): void
@@ -60,6 +59,6 @@ class SmsBranaSkProviderTest
 		$response = (new SmsBranaSkProvider)
 			->balance();
 
-		$this->assertSame(0.0, $response);
+		self::assertSame(0.0, $response);
 	}
 }

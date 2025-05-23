@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Tests\DependencyInjection\Factory\Provider;
 
-
 use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\ProviderFactoryInterface;
 use Maurit\Bundle\SmsBundle\Provider\ProviderInterface;
 use ReflectionClass;

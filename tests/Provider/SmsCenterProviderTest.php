@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Tests\Provider;
 
-
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Maurit\Bundle\SmsBundle\Exception\SmsCenterException;
@@ -17,6 +16,7 @@ class SmsCenterProviderTest
 {
 	use GuzzleClientTrait;
 
+
 	public function testThatSettersImplementsChainPattern(): void
 	{
 		$provider = (new SmsCenterProvider)
@@ -26,7 +26,7 @@ class SmsCenterProviderTest
 			->setFlash(true)
 			->setClient(new Client);
 
-		$this->assertInstanceOf(SmsCenterProvider::class, $provider);
+		self::assertInstanceOf(SmsCenterProvider::class, $provider);
 	}
 
 	public function testThatExceptionThrownOnInvalidResponseCode(): void
@@ -44,7 +44,7 @@ class SmsCenterProviderTest
 			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{"id": 1, "cnt": 1}')))
 			->send(new Sms('+1234567890', 'Hello World'));
 
-		$this->assertTrue($response);
+		self::assertSame(1, $response);
 	}
 
 	public function testSendWithAdditionalPostData(): void
@@ -54,7 +54,7 @@ class SmsCenterProviderTest
 			->setClient($this->getClientWithPreparedResponse(new Response(200, [], '{"id": 1, "cnt": 1}')))
 			->send(new Sms('+1234567890', 'Hello World'));
 
-		$this->assertTrue($response);
+		self::assertSame(1, $response);
 	}
 
 	public function testCheck(): void
@@ -68,7 +68,7 @@ class SmsCenterProviderTest
 }')))
 			->check(1);
 
-		$this->assertSame('1', $response);
+		self::assertSame('1', $response);
 	}
 
 	public function testBalance(): void
@@ -79,6 +79,6 @@ class SmsCenterProviderTest
 }')))
 			->balance();
 
-		$this->assertSame(123.45, $response);
+		self::assertSame(123.45, $response);
 	}
 }

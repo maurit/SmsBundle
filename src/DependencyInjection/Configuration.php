@@ -1,7 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\DependencyInjection;
-
 
 use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\ProviderFactoryInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -14,11 +13,11 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/configuration.html}
  */
-class Configuration
+readonly class Configuration
 	implements ConfigurationInterface
 {
 	/** @var ProviderFactoryInterface[] */
-	private $providerFactoryMap = [];
+	private array $providerFactoryMap;
 
 
 	public function __construct(array $providerFactoryMap)

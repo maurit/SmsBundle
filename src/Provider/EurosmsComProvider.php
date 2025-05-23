@@ -1,11 +1,10 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Provider;
 
-
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\RequestOptions;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use Maurit\Bundle\SmsBundle\Exception\EurosmsComException;
@@ -22,18 +21,12 @@ class EurosmsComProvider
 	private const BALANCE_URI = 'https://as.eurosms.com/api/v2/balance';
 	private const SMS_STATUS1_URI = 'http://as.eurosms.com/sms/Sender';
 
-	/** @var string */
-	private $key;
-	/** @var string */
-	private $id;
-	/** @var ClientInterface */
-	private $client;
-	/** @var bool */
-	private $test;
-	/** @var bool */
-	private $unicode;
-	/** @var bool */
-	private $long;
+	private string $key;
+	private string $id = '';
+	private ClientInterface $client;
+	private bool $test = false;
+	private bool $unicode;
+	private bool $long;
 
 
 	public function __construct()
@@ -59,7 +52,7 @@ class EurosmsComProvider
 		return $this;
 	}
 
-	public function setTest(bool $test): self
+	public function setTest(bool $test = true): self
 	{
 		$this->test = $test;
 		return $this;
@@ -77,6 +70,10 @@ class EurosmsComProvider
 		return $this;
 	}
 
+	/**
+	 * @return string message ID
+	 * @throws EurosmsComException
+	 */
 	public function send(SmsInterface $sms): string
 	{
 		$respRaw = $this->client->request('POST', $this->test ? self::SMS_SEND_URI_TEST : self::SMS_SEND_URI, $this->getPostSendData($sms))->getBody()->getContents();
@@ -91,7 +88,7 @@ class EurosmsComProvider
 
 	private function getPostSendData(SmsInterface $sms): array
 	{
-		if (empty($sms->getSender())) {
+		if (($sender = $sms->getSender()) === null || $sender === '') {
 			throw new EurosmsComException('Sender was not set');
 		}
 
@@ -112,23 +109,20 @@ class EurosmsComProvider
 			throw new EurosmsComException('text too long');
 		}
 
-		$data = [
-			'headers' => [
+		return [
+			RequestOptions::HEADERS => [
 				'accept' => 'application/json'
 			],
-			'json' => [
+			RequestOptions::JSON => [
 				'iid' => $this->id,
 				'sgn' => $this->calcSignature($sms->getSender(), $rcptN, $sms->getMessage()),
 				'rcpt' => $rcptN,
 				'flgs' => 0x01 /*Require delivery report*/ | ($isLong ? 0x02 : 0) | ($isAscii ? 0 : 0x04),
 				'sndr' => $sms->getSender(),
 				'txt' => $sms->getMessage(),
+				'sch' => $sms->getDateTime()->format('Y-m-d H:i')
 			]
 		];
-		if ($sms->getDateTime()) {
-			$data['json']['sch'] = $sms->getDateTime()->format('Y-m-d H:i');
-		}
-		return $data;
 	}
 
 	private function calcSignature($sender, $rcpt, $msg): string
@@ -143,7 +137,7 @@ class EurosmsComProvider
 		} catch (\Exception $e) {
 			throw new EurosmsComException($e->getMessage());
 		}
-		if (strpos($respRaw, 'BAD_INT') !== false) {
+		if (str_contains($respRaw, 'BAD_INT')) {
 			throw new EurosmsComException('Bad integration key');
 		}
 		return (float)$respRaw;
@@ -160,10 +154,10 @@ class EurosmsComProvider
 
 	public function check($id): string
 	{
-		if (Strings::match((string)$id, '/^\d+$/')) {
+		if (null !== Strings::match((string)$id, '/^\d+$/')) {
 			return $this->check1($id);
 		}
-		if (Strings::match($id, '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/')) {
+		if (null !== Strings::match($id, '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/')) {
 			return $this->check3($id);
 		}
 		throw new EurosmsComException('invalid ID: ' . $id);
@@ -175,13 +169,13 @@ class EurosmsComProvider
 			$respRaw = $this->client->request('GET', self::SMS_STATUS1_URI, $this->getGetCheck1Data($id))->getBody()->getContents();
 			$resp = explode('|', $respRaw);
 
-			if ($resp[0] != 'ok') {
+			if ($resp[0] !== 'ok') {
 				throw new EurosmsComException($respRaw);
 			}
 
 			return trim($resp[1]);
 		} catch (\Exception $e) {
-			throw new EurosmsComException($e->getMessage() . "\n" . $respRaw);
+			throw new EurosmsComException($e->getMessage());
 		}
 	}
 
@@ -201,9 +195,9 @@ class EurosmsComProvider
 			$respRaw = $this->client->request('GET', self::SMS_STATUS_URI . $id, $this->getGetCheck3Data())->getBody()->getContents();
 			$respJson = json_decode($respRaw);
 		} catch (\Exception $e) {
-			throw new EurosmsComException($e->getMessage() . "\n" . $respRaw);
+			throw new EurosmsComException($e->getMessage());
 		}
-		if ($respJson->err_code == 'OK') {
+		if ($respJson->err_code === 'OK') {
 			switch ($respJson->dlr) {
 				case 'ENROUTE':
 					return 'Queued';
@@ -232,7 +226,7 @@ class EurosmsComProvider
 	private function getGetCheck3Data(): array
 	{
 		return [
-			'headers' => [
+			RequestOptions::HEADERS => [
 				'accept' => 'application/json'
 			]
 		];

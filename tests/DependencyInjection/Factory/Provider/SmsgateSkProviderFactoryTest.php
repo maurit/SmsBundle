@@ -18,23 +18,23 @@ class SmsgateSkProviderFactoryTest
 
 	public function testGetCorrectName(): void
 	{
-		$this->assertEquals('smsgate_sk', (new SmsgateSkProviderFactory)->getName());
+		self::assertEquals('smsgate_sk', (new SmsgateSkProviderFactory)->getName());
 	}
 
 	public function testConfigurationHasAllRequiredParameters(): void
 	{
 		$def = $this->getFactoryConfiguration(new SmsgateSkProviderFactory);
 
-		$this->assertArrayHasKey('token', $def);
+		self::assertArrayHasKey('token', $def);
 	}
 
 	public function testConfigurationHasCorrectTypes(): void
 	{
 		$def = $this->getFactoryConfiguration(new SmsgateSkProviderFactory);
 
-		$this->assertInstanceOf(ScalarNodeDefinition::class, $def['token']);
-		$this->assertInstanceOf(BooleanNodeDefinition::class, $def['unicode']);
-		$this->assertInstanceOf(BooleanNodeDefinition::class, $def['textNumbers']);
+		self::assertInstanceOf(ScalarNodeDefinition::class, $def['token']);
+		self::assertInstanceOf(BooleanNodeDefinition::class, $def['unicode']);
+		self::assertInstanceOf(BooleanNodeDefinition::class, $def['textNumbers']);
 	}
 
 	public function testThatDefinitionHasAllRequiredMethods(): void
@@ -43,7 +43,7 @@ class SmsgateSkProviderFactoryTest
 		$calls = $this->getDefinitionMethodCalls(new SmsgateSkProviderFactory, ['token', 'unicode', 'textNumbers']);
 
 		foreach ($calls as $call) {
-			$this->assertContains($call, $prototypeMethods);
+			self::assertContains($call, $prototypeMethods);
 		}
 	}
 }

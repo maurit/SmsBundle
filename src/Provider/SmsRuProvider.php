@@ -1,12 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Provider;
 
-
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\RequestOptions;
 use Maurit\Bundle\SmsBundle\Exception\SmsRuException;
 use Maurit\Bundle\SmsBundle\Sms\SmsInterface;
+use Nette\Utils\Json;
 
 
 class SmsRuProvider
@@ -16,14 +17,10 @@ class SmsRuProvider
 	private const SMS_STATUS_URI = 'https://sms.ru/sms/status';
 	private const BALANCE_URI = 'https://sms.ru/my/balance';
 
-	/** @var string */
-	private $apiId;
-	/** @var string */
-	private $from;
-	/** @var bool */
-	private $test;
-	/** @var ClientInterface */
-	private $client;
+	private string $apiId = '';
+	private string $from = '';
+	private bool $test = false;
+	private ClientInterface $client;
 
 
 	public function __construct()
@@ -34,53 +31,49 @@ class SmsRuProvider
 	public function setClient(ClientInterface $client): self
 	{
 		$this->client = $client;
-
 		return $this;
 	}
 
 	public function setApiId(string $apiId): self
 	{
 		$this->apiId = $apiId;
-
 		return $this;
 	}
 
 	public function setFrom(string $from): self
 	{
 		$this->from = $from;
-
 		return $this;
 	}
 
-	public function setTest(bool $test): self
+	public function setTest(bool $test = true): self
 	{
 		$this->test = $test;
-
 		return $this;
 	}
 
-	public function send(SmsInterface $sms): bool
+	public function send(SmsInterface $sms): string
 	{
-		$response = $this->client->request('POST', self::SMS_SEND_URI, $this->getPostData($sms));
-		$responseCode = (int)$response->getBody()->read(3);
-
-		if ($responseCode != 100) {
-			throw new SmsRuException($responseCode);
+		$respRaw = $this->client->request('POST', self::SMS_SEND_URI, $this->getPostData($sms))->getBody()->getContents();
+		$respJson = Json::decode($respRaw, Json::FORCE_ARRAY);
+		if ($respJson['status'] !== 'OK') {
+			throw new SmsRuException($respJson['status_code']);
 		}
 
-		return true;
+		return (string)array_key_first($respJson['sms']);
 	}
 
 	private function getPostData(SmsInterface $sms): array
 	{
 		return [
-			'form_params' => [
+			RequestOptions::FORM_PARAMS => [
 				'api_id' => $this->apiId,
 				'from' => $this->from,
 				'to' => $sms->getPhoneNumber(),
 				'msg' => $sms->getMessage(),
 				'time' => $sms->getDateTime()->getTimestamp(),
 				'test' => (int)$this->test,
+				'json' => 1
 			],
 		];
 	}
@@ -91,7 +84,7 @@ class SmsRuProvider
 		$jsonResponse = json_decode($response->getBody()->getContents());
 		$responseCode = (int)$jsonResponse->status_code;
 
-		if ($responseCode != 100) {
+		if ($responseCode !== 100) {
 			throw new SmsRuException($responseCode);
 		}
 
@@ -101,7 +94,7 @@ class SmsRuProvider
 	private function getPostBalanceData(): array
 	{
 		return [
-			'form_params' => [
+			RequestOptions::FORM_PARAMS => [
 				'api_id' => $this->apiId
 			]
 		];
@@ -113,7 +106,7 @@ class SmsRuProvider
 		$jsonResponse = json_decode($response->getBody()->getContents(), true);
 		$responseCode = (int)$jsonResponse['status_code'];
 
-		if ($responseCode != 100) {
+		if ($responseCode !== 100) {
 			throw new SmsRuException($responseCode);
 		}
 
@@ -123,7 +116,7 @@ class SmsRuProvider
 	private function getPostStatusData($id): array
 	{
 		return [
-			'form_params' => [
+			RequestOptions::FORM_PARAMS => [
 				'api_id' => $this->apiId,
 				'sms_id' => $id
 			]

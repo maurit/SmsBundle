@@ -1,7 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\DependencyInjection\Compiler;
-
 
 use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\AbstractProviderFactory;
 use Maurit\Bundle\SmsBundle\Service\ProviderManager;

@@ -1,7 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Service;
-
 
 use Maurit\Bundle\SmsBundle\Provider\ProviderInterface;
 
@@ -9,7 +8,7 @@ use Maurit\Bundle\SmsBundle\Provider\ProviderInterface;
 class ProviderManager
 {
 	/** @var ProviderInterface[] */
-	protected $providers;
+	protected array $providers;
 
 
 	public function addProvider(string $providerName, ProviderInterface $provider): void

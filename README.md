@@ -21,7 +21,7 @@ You can define as many provider configurations as you want. Available providers 
  * [Sms Center](src/Resources/docs/providers/sms_center.md) [smsc.ru]
  * [EuroSMS com](src/Resources/docs/providers/eurosms_com.md) [eurosms.com]
  * [SmsBrana sk](src/Resources/docs/providers/sms_brana_sk.md) [sms-brana.sk]
-* [Smsgate sk](src/Resources/docs/providers/smsgate_sk.md) [smsgate.sk]
+ * [Smsgate sk](src/Resources/docs/providers/smsgate_sk.md) [smsgate.sk]
 
 # Usage
 

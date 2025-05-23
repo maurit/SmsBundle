@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Exception;
 
@@ -7,12 +7,10 @@ class SmsCenterException
 	extends \Exception
 {
 	/**
-	 * Map of error messages.
+	 * Map of error messages
 	 * You can find more info at https://smsc.ru/api/http/send/sms/sms_answer/
-	 *
-	 * @var array
 	 */
-	private $codeDescriptionMap = [
+	private array $codeDescriptionMap = [
 		1 => 'Error in the parameters.',
 		2 => 'Wrong login or password.',
 		3 => 'There is not enough money on the Customer\'s account.',
@@ -24,6 +22,7 @@ class SmsCenterException
 		9 => 'Sending more than one identical request to send an SMS message or more than five identical requests to receive the message\'s cost within a minute.',
 	];
 
+
 	public function __construct(int $code)
 	{
 		parent::__construct(sprintf('%u: %s', $code, $this->getCodeDescription($code)), $code);
@@ -31,7 +30,7 @@ class SmsCenterException
 
 	private function getCodeDescription(int $code): string
 	{
-		return (key_exists($code, $this->codeDescriptionMap))
+		return (array_key_exists($code, $this->codeDescriptionMap))
 			? $this->codeDescriptionMap[$code]
 			: 'Unknown error';
 	}

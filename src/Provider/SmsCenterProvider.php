@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Provider;
 
-
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\RequestOptions;
 use Maurit\Bundle\SmsBundle\Exception\SmsCenterException;
 use Maurit\Bundle\SmsBundle\Sms\SmsInterface;
 
@@ -16,16 +16,11 @@ class SmsCenterProvider
 	private const STATUS_URI = 'https://smsc.ru/sys/status.php';
 	private const BALANCE_URI = 'https://smsc.ru/sys/balance.php';
 
-	/** @var string */
-	private $login;
-	/** @var string */
-	private $password;
-	/** @var null|string */
-	private $sender;
-	/** @var bool */
-	private $flash;
-	/** @var ClientInterface */
-	private $client;
+	private string $login = '';
+	private ?string $password = null;
+	private ?string $sender = null;
+	private bool $flash = false;
+	private ClientInterface $client;
 
 
 	public function __construct()
@@ -36,39 +31,34 @@ class SmsCenterProvider
 	public function setClient(ClientInterface $client): self
 	{
 		$this->client = $client;
-
 		return $this;
 	}
 
 	public function setLogin(string $login): self
 	{
 		$this->login = $login;
-
 		return $this;
 	}
 
 	public function setPassword(?string $password): self
 	{
 		$this->password = $password;
-
 		return $this;
 	}
 
 	public function setSender(?string $sender): self
 	{
 		$this->sender = $sender;
-
 		return $this;
 	}
 
-	public function setFlash(bool $flash): self
+	public function setFlash(bool $flash = true): self
 	{
 		$this->flash = $flash;
-
 		return $this;
 	}
 
-	public function send(SmsInterface $sms): bool
+	public function send(SmsInterface $sms): int
 	{
 		$response = $this->client->request('POST', self::SMS_SEND_URI, $this->getPostData($sms));
 		$jsonResponse = json_decode($response->getBody()->getContents());
@@ -77,13 +67,13 @@ class SmsCenterProvider
 			throw new SmsCenterException($jsonResponse->error_code);
 		}
 
-		return true;
+		return $jsonResponse->id;
 	}
 
 	private function getPostData(SmsInterface $sms): array
 	{
 		$post = [
-			'form_params' => [
+			RequestOptions::FORM_PARAMS => [
 				'login' => $this->login,
 				'psw' => $this->getPassword(),
 				'phones' => $sms->getPhoneNumber(),
@@ -95,8 +85,8 @@ class SmsCenterProvider
 			]
 		];
 
-		if ($this->sender) {
-			$post['form_params']['sender'] = $this->sender;
+		if ($this->sender !== null) {
+			$post[RequestOptions::FORM_PARAMS]['sender'] = $this->sender;
 		}
 
 		return $post;
@@ -128,7 +118,7 @@ class SmsCenterProvider
 	private function getPostBalanceData(): array
 	{
 		return [
-			'form_params' => [
+			RequestOptions::FORM_PARAMS => [
 				'login' => $this->login,
 				'psw' => $this->getPassword(),
 				'fmt' => 3, // Get response in json format
@@ -146,13 +136,13 @@ class SmsCenterProvider
 			throw new SmsCenterException($jsonResponse->error_code);
 		}
 
-		return $jsonResponse->status;
+		return (string)$jsonResponse->status;
 	}
 
 	private function getPostCheckData(): array
 	{
 		return [
-			'form_params' => [
+			RequestOptions::FORM_PARAMS => [
 				'login' => $this->login,
 				'psw' => $this->getPassword(),
 				'fmt' => 3, // Get response in json format

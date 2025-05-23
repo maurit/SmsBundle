@@ -2,7 +2,6 @@
 
 namespace Maurit\Bundle\SmsBundle;
 
-
 use Maurit\Bundle\SmsBundle\DependencyInjection\Compiler\ProviderCompilerPass;
 use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\EurosmsComProviderFactory;
 use Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider\MessageBirdProviderFactory;

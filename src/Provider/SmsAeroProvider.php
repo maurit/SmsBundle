@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Provider;
 
-
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\RequestOptions;
 use Maurit\Bundle\SmsBundle\Exception\SmsAeroException;
 use Maurit\Bundle\SmsBundle\Sms\SmsInterface;
 
@@ -16,16 +16,11 @@ class SmsAeroProvider
 	private const SMS_STATUS_URI = 'https://gate.smsaero.ru/v2/sms/status';
 	private const BALANCE_URI = 'https://gate.smsaero.ru/v2/balance';
 
-	/** @var string */
-	private $user;
-	/** @var string */
-	private $apiKey;
-	/** @var string */
-	private $sign;
-	/** @var string */
-	private $channel;
-	/** @var ClientInterface */
-	private $client;
+	private string $user = '';
+	private string $apiKey = '';
+	private string $sign = '';
+	private string $channel = '';
+	private ClientInterface $client;
 
 
 	public function __construct()
@@ -36,39 +31,34 @@ class SmsAeroProvider
 	public function setClient(ClientInterface $client): self
 	{
 		$this->client = $client;
-
 		return $this;
 	}
 
 	public function setUser(string $user): self
 	{
 		$this->user = $user;
-
 		return $this;
 	}
 
 	public function setApiKey(string $apiKey): self
 	{
 		$this->apiKey = $apiKey;
-
 		return $this;
 	}
 
 	public function setSign(string $sign): self
 	{
 		$this->sign = $sign;
-
 		return $this;
 	}
 
 	public function setChannel(string $channel): self
 	{
 		$this->channel = $channel;
-
 		return $this;
 	}
 
-	public function send(SmsInterface $sms): bool
+	public function send(SmsInterface $sms): int
 	{
 		$response = $this->client->request('POST', self::SMS_SEND_URI, $this->getPostSendData($sms));
 		$jsonResponse = json_decode($response->getBody()->getContents());
@@ -77,20 +67,20 @@ class SmsAeroProvider
 			throw new SmsAeroException(json_encode($jsonResponse));
 		}
 
-		return true;
+		return $jsonResponse->data[0]->id;
 	}
 
 	private function getPostSendData(SmsInterface $sms): array
 	{
 		return [
-			'headers' => [
+			RequestOptions::HEADERS => [
 				'accept' => 'application/json'
 			],
-			'auth' => [
+			RequestOptions::AUTH => [
 				$this->user,
 				$this->apiKey
 			],
-			'form_params' => [
+			RequestOptions::FORM_PARAMS => [
 				'sign' => $this->sign,
 				'channel' => $this->channel,
 				'number' => $sms->getPhoneNumber(),
@@ -115,10 +105,10 @@ class SmsAeroProvider
 	private function getPostBalanceData(): array
 	{
 		return [
-			'headers' => [
+			RequestOptions::HEADERS => [
 				'accept' => 'application/json'
 			],
-			'auth' => [
+			RequestOptions::AUTH => [
 				$this->user,
 				$this->apiKey
 			]
@@ -140,14 +130,14 @@ class SmsAeroProvider
 	private function getPostStatusData($id): array
 	{
 		return [
-			'headers' => [
+			RequestOptions::HEADERS => [
 				'accept' => 'application/json'
 			],
-			'auth' => [
+			RequestOptions::AUTH => [
 				$this->user,
 				$this->apiKey
 			],
-			'form_params' => [
+			RequestOptions::FORM_PARAMS => [
 				'id' => $id
 			]
 		];

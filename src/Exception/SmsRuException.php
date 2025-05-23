@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\Exception;
 
@@ -9,10 +9,8 @@ class SmsRuException
 	/**
 	 * Map of error messages.
 	 * You can find more info at https://sms.ru/php
-	 *
-	 * @var array
 	 */
-	private $codeDescriptionMap = [
+	private array $codeDescriptionMap = [
 		100 => 'The command was successful (or the message was accepted for sending)',
 		101 => 'The message is sent to the provider',
 		102 => 'Your message has been sent (along the way)',
@@ -47,6 +45,7 @@ class SmsRuException
 		302 => 'The user is authorized, but the account is not confirmed (the user did not enter the code sent in the registration sms)',
 	];
 
+
 	public function __construct(int $code = 0)
 	{
 		parent::__construct(sprintf('%u: %s', $code, $this->getCodeDescription($code)), $code);
@@ -54,7 +53,7 @@ class SmsRuException
 
 	private function getCodeDescription(int $code): string
 	{
-		return (key_exists($code, $this->codeDescriptionMap))
+		return (array_key_exists($code, $this->codeDescriptionMap))
 			? $this->codeDescriptionMap[$code]
 			: 'Unknown error';
 	}

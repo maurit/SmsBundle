@@ -1,7 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Maurit\Bundle\SmsBundle\DependencyInjection\Factory\Provider;
-
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -23,9 +22,9 @@ class SmsRuProviderFactory
 			->addMethodCall('setTest', [$config['test']]);
 	}
 
-	public function buildConfiguration(ArrayNodeDefinition $nodeDefinition): void
+	public function buildConfiguration(ArrayNodeDefinition $arrayNodeDefinition): void
 	{
-		$nodeDefinition
+		$arrayNodeDefinition
 			->children()
 				->scalarNode('api_id')
 					->isRequired()
